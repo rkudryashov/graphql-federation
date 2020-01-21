@@ -1,0 +1,14 @@
+schema {
+    query: Query
+}
+
+type Query {
+    # todo by country
+    cities: [City!]!
+    city(id: ID!): City!
+}
+
+type City {
+    id: ID!
+    name: String!
+}
