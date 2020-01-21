@@ -1,0 +1,32 @@
+schema {
+    query: Query
+    #    mutation: Mutation
+}
+
+type Query {
+    countries: [Country!]!
+    country(id: ID!): Country!
+}
+
+type Country {
+    id: ID!
+    name: String!
+    # population in millions
+    population: Float!
+    continent: Continent
+    # todo cities
+}
+
+enum Continent {
+    AFRICA
+    ASIA
+    EUROPE
+    NORTH_AMERICA
+    SOUTH_AMERICA
+    ANTARCTICA
+    AUSTRALIA
+}
+
+#type Mutation {
+#
+#}
