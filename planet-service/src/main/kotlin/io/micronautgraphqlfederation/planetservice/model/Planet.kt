@@ -1,9 +1,9 @@
-package io.micronautgraphqlfederation.countryservice.model
+package io.micronautgraphqlfederation.planetservice.model
 
 import javax.persistence.*
 
 @Entity
-class Country(
+class Planet(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

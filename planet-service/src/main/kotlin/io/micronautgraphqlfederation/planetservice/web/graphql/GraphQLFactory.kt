@@ -1,4 +1,4 @@
-package io.micronautgraphqlfederation.countryservice.web.graphql
+package io.micronautgraphqlfederation.planetservice.web.graphql
 
 import com.apollographql.federation.graphqljava.Federation
 import graphql.GraphQL
@@ -14,8 +14,8 @@ import javax.inject.Singleton
 
 @Factory
 class GraphQLFactory(
-    private val countriesFetcher: CountriesFetcher,
-    private val countryFetcher: CountryFetcher
+    private val planetsFetcher: PlanetsFetcher,
+    private val planetFetcher: PlanetFetcher
 ) {
 
     @Bean
@@ -31,8 +31,8 @@ class GraphQLFactory(
     private fun createRuntimeWiring(): RuntimeWiring = RuntimeWiring.newRuntimeWiring()
         .type(
             TypeRuntimeWiring.newTypeWiring("Query")
-                .dataFetcher("countries", countriesFetcher)
-                .dataFetcher("country", countryFetcher)
+                .dataFetcher("planets", planetsFetcher)
+                .dataFetcher("planet", planetFetcher)
         )
         .build()
 }
