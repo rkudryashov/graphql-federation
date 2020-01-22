@@ -1,9 +1,9 @@
-package io.micronautgraphqlfederation.cityservice.model
+package io.micronautgraphqlfederation.satelliteservice.model
 
 import javax.persistence.*
 
 @Entity
-class City(
+class Satellite(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

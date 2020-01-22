@@ -3,12 +3,12 @@ schema {
 }
 
 type Query {
-    # todo by country
-    cities: [City!]!
-    city(id: ID!): City!
+    # todo by planet
+    satellites: [Satellite!]!
+    satellite(id: ID!): Satellite!
 }
 
-type City {
+type Satellite {
     id: ID!
     name: String!
 }

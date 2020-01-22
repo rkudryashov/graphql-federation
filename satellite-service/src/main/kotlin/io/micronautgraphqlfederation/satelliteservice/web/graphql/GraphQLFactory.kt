@@ -1,4 +1,4 @@
-package io.micronautgraphqlfederation.cityservice.web.graphql
+package io.micronautgraphqlfederation.satelliteservice.web.graphql
 
 import com.apollographql.federation.graphqljava.Federation
 import graphql.GraphQL
@@ -14,8 +14,8 @@ import javax.inject.Singleton
 
 @Factory
 class GraphQLFactory(
-    private val citiesFetcher: CitiesFetcher,
-    private val cityFetcher: CityFetcher
+    private val satellitesFetcher: SatellitesFetcher,
+    private val satelliteFetcher: SatelliteFetcher
 ) {
 
     @Bean
@@ -31,8 +31,8 @@ class GraphQLFactory(
     private fun createRuntimeWiring(): RuntimeWiring = RuntimeWiring.newRuntimeWiring()
         .type(
             TypeRuntimeWiring.newTypeWiring("Query")
-                .dataFetcher("cities", citiesFetcher)
-                .dataFetcher("city", cityFetcher)
+                .dataFetcher("satellites", satellitesFetcher)
+                .dataFetcher("satellite", satelliteFetcher)
         )
         .build()
 }
