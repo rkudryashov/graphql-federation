@@ -16,6 +16,7 @@ class PlanetConverter : GenericConverter<Planet, PlanetDto> {
         PlanetDto(
             id = entity.id,
             name = entity.name,
+            type = entity.type,
             characteristics = null
         )
 }

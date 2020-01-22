@@ -11,28 +11,23 @@ type Query {
 type Planet {
     id: ID!
     name: String!
+    type: Type!
+    # base characteristics
     characteristics: Characteristics!
-    # population in millions
-    population: Float!
-    #    continent: Continent
+    isRotatingAroundSun: Boolean! @deprecated(reason: "Do not use this field")
     # todo satellites
-    # todo depre
+}
+
+enum Type {
+    TERRESTRIAL_PLANET
+    GAS_GIANT
+    ICE_GIANT
+    DWARF_PLANET
 }
 
 type Characteristics {
     meanRadius: Float!
     earthsMass: Float!
-}
-
-# todo
-enum Continent {
-    AFRICA
-    ASIA
-    EUROPE
-    NORTH_AMERICA
-    SOUTH_AMERICA
-    ANTARCTICA
-    AUSTRALIA
 }
 
 #type Mutation {

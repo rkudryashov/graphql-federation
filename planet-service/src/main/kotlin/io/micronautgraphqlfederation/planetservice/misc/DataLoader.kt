@@ -16,20 +16,26 @@ class DataLoader(
 
     @EventListener
     fun init(event: StartupEvent) {
-        createPlanet("Mercury", 2439.7, 0.055274)
-        createPlanet("Venus", 6051.8, 0.815)
-        createPlanet("Earth", 6371.0, 1.0)
-        createPlanet("Mars", 3389.5, 0.107)
-        createPlanet("Jupiter", 69911.0, 317.8)
-        createPlanet("Saturn", 58232.0, 95.2)
-        createPlanet("Uranus", 25362.0, 14.54)
-        createPlanet("Neptune", 24622.0, 17.147)
+        createPlanet("Mercury", Planet.Type.TERRESTRIAL_PLANET, 2439.7, 0.055274)
+        createPlanet("Venus", Planet.Type.TERRESTRIAL_PLANET, 6051.8, 0.815)
+        createPlanet("Earth", Planet.Type.TERRESTRIAL_PLANET, 6371.0, 1.0)
+        createPlanet("Mars", Planet.Type.TERRESTRIAL_PLANET, 3389.5, 0.107)
+        createPlanet("Jupiter", Planet.Type.GAS_GIANT, 69911.0, 317.8)
+        createPlanet("Saturn", Planet.Type.GAS_GIANT, 58232.0, 95.2)
+        createPlanet("Uranus", Planet.Type.ICE_GIANT, 25362.0, 14.54)
+        createPlanet("Neptune", Planet.Type.ICE_GIANT, 24622.0, 17.147)
     }
 
-    private fun createPlanet(name: String, meanRadius: Double, earthsMass: Double) {
+    private fun createPlanet(
+        name: String,
+        type: Planet.Type,
+        meanRadius: Double,
+        earthsMass: Double
+    ) {
         val planet = Planet(
             id = 0,
-            name = name
+            name = name,
+            type = type
         )
 
         planetRepository.save(planet)

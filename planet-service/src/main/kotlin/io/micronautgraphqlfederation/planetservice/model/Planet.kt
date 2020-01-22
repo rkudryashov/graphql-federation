@@ -10,5 +10,16 @@ class Planet(
     val id: Long = 0,
 
     @Column
-    val name: String
-)
+    val name: String,
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    val type: Type
+) {
+    enum class Type {
+        TERRESTRIAL_PLANET,
+        GAS_GIANT,
+        ICE_GIANT,
+        DWARF_PLANET
+    }
+}
