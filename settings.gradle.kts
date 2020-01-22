@@ -1,8 +1,8 @@
 rootProject.name = "micronaut-graphql-federation"
 
 include(
-    "city-service",
-    "country-service"
+    "planet-service",
+    "satellite-service"
 )
 
 pluginManagement {
