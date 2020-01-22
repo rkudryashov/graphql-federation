@@ -5,17 +5,19 @@ import graphql.GraphQL
 import graphql.schema.idl.RuntimeWiring
 import graphql.schema.idl.SchemaGenerator
 import graphql.schema.idl.SchemaParser
-import graphql.schema.idl.TypeRuntimeWiring
+import graphql.schema.idl.TypeRuntimeWiring.newTypeWiring
 import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.Factory
 import io.micronaut.core.io.ResourceResolver
+import io.micronautgraphqlfederation.planetservice.web.graphql.resolver.PlanetResolver
 import java.io.InputStreamReader
 import javax.inject.Singleton
 
 @Factory
 class GraphQLFactory(
     private val planetsFetcher: PlanetsFetcher,
-    private val planetFetcher: PlanetFetcher
+    private val planetFetcher: PlanetFetcher,
+    private val planetResolver: PlanetResolver
 ) {
 
     @Bean
@@ -30,9 +32,14 @@ class GraphQLFactory(
 
     private fun createRuntimeWiring(): RuntimeWiring = RuntimeWiring.newRuntimeWiring()
         .type(
-            TypeRuntimeWiring.newTypeWiring("Query")
+            newTypeWiring("Query")
                 .dataFetcher("planets", planetsFetcher)
                 .dataFetcher("planet", planetFetcher)
+
+        )
+        .type(
+            newTypeWiring("Planet")
+                .dataFetcher("characteristics") { env -> planetResolver.characteristics(env.getSource()) }
         )
         .build()
 }

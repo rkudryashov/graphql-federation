@@ -11,10 +11,17 @@ type Query {
 type Planet {
     id: ID!
     name: String!
+    characteristics: Characteristics!
     # population in millions
     population: Float!
-    continent: Continent
+    #    continent: Continent
     # todo satellites
+    # todo depre
+}
+
+type Characteristics {
+    meanRadius: Float!
+    earthsMass: Float!
 }
 
 # todo

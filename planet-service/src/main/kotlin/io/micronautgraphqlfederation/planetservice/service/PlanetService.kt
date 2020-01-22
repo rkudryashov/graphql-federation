@@ -12,5 +12,5 @@ class PlanetService(
     fun getAll(): Iterable<Planet> = repository.findAll()
 
     fun getById(id: Long): Planet =
-        repository.findById(id).orElseThrow { RuntimeException("Can't find Planet by id=$id") }
+        repository.findById(id).orElseThrow { RuntimeException("Can't find planet by id=$id") }
 }
