@@ -9,9 +9,6 @@ class Characteristics(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
-    @OneToOne
-    val planet: Planet,
-
     @Column
     val meanRadius: Double,
 

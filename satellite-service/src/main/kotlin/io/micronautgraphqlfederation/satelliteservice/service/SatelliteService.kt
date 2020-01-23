@@ -11,5 +11,6 @@ class SatelliteService(
 
     fun getAll(): Iterable<Satellite> = repository.findAll()
 
-    fun getById(id: Long): Satellite = repository.findById(id).orElseThrow { RuntimeException("Can't find Satellite by id=$id") }
+    fun getById(id: Long): Satellite =
+        repository.findById(id).orElseThrow { RuntimeException("Can't find satellite by id=$id") }
 }

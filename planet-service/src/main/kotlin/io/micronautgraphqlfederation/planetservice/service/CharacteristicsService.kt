@@ -9,6 +9,5 @@ class CharacteristicsService(
     private val repository: CharacteristicsRepository
 ) {
 
-    fun getByPlanetId(planetId: Long): Characteristics =
-        repository.findByPlanetId(planetId).orElseThrow { RuntimeException("Can't find characteristics by planetId=$planetId") }
+    fun getByIds(ids: List<Long>): List<Characteristics> = repository.findByIdInList(ids)
 }

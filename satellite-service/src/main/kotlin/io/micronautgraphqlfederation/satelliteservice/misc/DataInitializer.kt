@@ -7,7 +7,7 @@ import io.micronautgraphqlfederation.satelliteservice.repository.SatelliteReposi
 import javax.inject.Singleton
 
 @Singleton
-class DataLoader(
+class DataInitializer(
     private val repository: SatelliteRepository
 ) {
     @EventListener

@@ -8,7 +8,7 @@ type Query {
     planet(id: ID!): Planet!
 }
 
-type Planet {
+interface Planet {
     id: ID!
     name: String!
     type: Type!
@@ -16,6 +16,24 @@ type Planet {
     characteristics: Characteristics!
     isRotatingAroundSun: Boolean! @deprecated(reason: "Do not use this field")
     # todo satellites
+}
+
+type UninhabitedPlanet implements Planet {
+    id: ID!
+    name: String!
+    type: Type!
+    characteristics: Characteristics!
+    isRotatingAroundSun: Boolean!
+}
+
+type InhabitedPlanet implements Planet {
+    id: ID!
+    name: String!
+    type: Type!
+    characteristics: Characteristics!
+    isRotatingAroundSun: Boolean!
+    # in billions
+    population: Float!
 }
 
 enum Type {
