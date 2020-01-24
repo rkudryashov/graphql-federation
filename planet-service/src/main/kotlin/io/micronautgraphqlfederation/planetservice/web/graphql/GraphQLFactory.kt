@@ -3,6 +3,7 @@ package io.micronautgraphqlfederation.planetservice.web.graphql
 import com.apollographql.federation.graphqljava.Federation
 import graphql.GraphQL
 import graphql.schema.TypeResolver
+import graphql.schema.idl.NaturalEnumValuesProvider
 import graphql.schema.idl.RuntimeWiring
 import graphql.schema.idl.SchemaGenerator
 import graphql.schema.idl.SchemaParser
@@ -10,6 +11,7 @@ import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.Factory
 import io.micronaut.core.io.ResourceResolver
 import io.micronautgraphqlfederation.planetservice.misc.CharacteristicsConverter
+import io.micronautgraphqlfederation.planetservice.model.Planet
 import io.micronautgraphqlfederation.planetservice.service.CharacteristicsService
 import io.micronautgraphqlfederation.planetservice.web.dto.CharacteristicsDto
 import io.micronautgraphqlfederation.planetservice.web.dto.InhabitedPlanetDto
@@ -26,6 +28,7 @@ import javax.inject.Singleton
 class GraphQLFactory(
     private val planetsFetcher: PlanetsFetcher,
     private val planetFetcher: PlanetFetcher,
+    private val createPlanetFetcher: CreatePlanetFetcher,
     private val characteristicsFetcher: CharacteristicsFetcher,
     private val characteristicsService: CharacteristicsService,
     private val characteristicsConverter: CharacteristicsConverter
@@ -57,17 +60,20 @@ class GraphQLFactory(
                     .dataFetcher("planets", planetsFetcher)
                     .dataFetcher("planet", planetFetcher)
             }
+            .type("Mutation") { builder ->
+                builder.dataFetcher("createPlanet", createPlanetFetcher)
+            }
             .type("Planet") { builder ->
-                builder
-                    .typeResolver(planetResolver)
+                builder.typeResolver(planetResolver)
             }
             .type("InhabitedPlanet") { builder ->
-                builder
-                    .dataFetcher("characteristics", characteristicsFetcher)
+                builder.dataFetcher("characteristics", characteristicsFetcher)
             }
             .type("UninhabitedPlanet") { builder ->
-                builder
-                    .dataFetcher("characteristics", characteristicsFetcher)
+                builder.dataFetcher("characteristics", characteristicsFetcher)
+            }
+            .type("Type") { builder ->
+                builder.enumValues(NaturalEnumValuesProvider(Planet.Type::class.java))
             }
             .build()
     }

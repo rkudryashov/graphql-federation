@@ -1,11 +1,15 @@
 schema {
     query: Query
-    #    mutation: Mutation
+    mutation: Mutation
 }
 
 type Query {
     planets: [Planet!]!
     planet(id: ID!): Planet!
+}
+
+type Mutation {
+    createPlanet(name: String!, type: Type!, characteristics: CharacteristicsInput!): Planet!
 }
 
 interface Planet {
@@ -48,6 +52,7 @@ type Characteristics {
     earthsMass: Float!
 }
 
-#type Mutation {
-#
-#}
+input CharacteristicsInput {
+    meanRadius: Float!
+    earthsMass: Float!
+}

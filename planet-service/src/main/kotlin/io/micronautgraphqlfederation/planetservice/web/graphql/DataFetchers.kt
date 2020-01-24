@@ -1,10 +1,13 @@
 package io.micronautgraphqlfederation.planetservice.web.graphql
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import graphql.schema.DataFetcher
 import graphql.schema.DataFetchingEnvironment
 import io.micronautgraphqlfederation.planetservice.misc.PlanetConverter
+import io.micronautgraphqlfederation.planetservice.model.Planet
 import io.micronautgraphqlfederation.planetservice.service.PlanetService
 import io.micronautgraphqlfederation.planetservice.web.dto.CharacteristicsDto
+import io.micronautgraphqlfederation.planetservice.web.dto.CharacteristicsInputDto
 import io.micronautgraphqlfederation.planetservice.web.dto.PlanetDto
 import org.dataloader.DataLoader
 import org.slf4j.LoggerFactory
@@ -40,9 +43,35 @@ class CharacteristicsFetcher : DataFetcher<CompletableFuture<CharacteristicsDto>
         val planetDto = env.getSource<PlanetDto>()
         log.info("Resolve `characteristics` field for planet: ${planetDto.name}")
 
-        val dataLoader: DataLoader<Long, CharacteristicsDto> = env.getDataLoader("characteristics");
+        val dataLoader: DataLoader<Long, CharacteristicsDto> = env.getDataLoader("characteristics")
 
         return dataLoader.load(planetDto.characteristics.id)
+    }
+}
+
+@Singleton
+class CreatePlanetFetcher(
+    private val objectMapper: ObjectMapper,
+    private val planetService: PlanetService,
+    private val planetConverter: PlanetConverter
+) : DataFetcher<PlanetDto> {
+
+    private val log = LoggerFactory.getLogger(this.javaClass)
+
+    override fun get(env: DataFetchingEnvironment): PlanetDto {
+        log.info("Trying to create planet")
+
+        val name = env.getArgument<String>("name")
+        val type = env.getArgument<Planet.Type>("type")
+        val characteristicsInputDto = objectMapper.convertValue(
+            env.getArgument("characteristics"), CharacteristicsInputDto::class.java
+        )
+
+        val newPlanet = planetService.create(
+            name, type, characteristicsInputDto.meanRadius, characteristicsInputDto.earthsMass
+        )
+
+        return planetConverter.toDto(newPlanet)
     }
 }
 

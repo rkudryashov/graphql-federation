@@ -5,7 +5,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 val kotlinVersion: String by project
 val micronautVersion: String by project
 val micronautDataVersion: String by project
-//val jacksonVersion: String by project
 val logbackVersion: String by project
 val junitVersion: String by project
 val apolloFederationJavaVersion: String by project
