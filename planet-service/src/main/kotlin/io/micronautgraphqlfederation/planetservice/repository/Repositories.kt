@@ -6,7 +6,9 @@ import io.micronautgraphqlfederation.planetservice.model.Characteristics
 import io.micronautgraphqlfederation.planetservice.model.Planet
 
 @Repository
-interface PlanetRepository : CrudRepository<Planet, Long>
+interface PlanetRepository : CrudRepository<Planet, Long> {
+    fun findByName(name: String): Planet?
+}
 
 @Repository
 interface CharacteristicsRepository : CrudRepository<Characteristics, Long> {

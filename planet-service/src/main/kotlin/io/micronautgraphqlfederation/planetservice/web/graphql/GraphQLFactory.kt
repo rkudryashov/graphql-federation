@@ -26,8 +26,9 @@ import javax.inject.Singleton
 
 @Factory
 class GraphQLFactory(
-    private val planetsFetcher: PlanetsFetcher,
-    private val planetFetcher: PlanetFetcher,
+    private val getPlanetsFetcher: GetPlanetsFetcher,
+    private val getPlanetFetcher: GetPlanetFetcher,
+    private val getPlanetByNameFetcher: GetPlanetByNameFetcher,
     private val createPlanetFetcher: CreatePlanetFetcher,
     private val characteristicsFetcher: CharacteristicsFetcher,
     private val characteristicsService: CharacteristicsService,
@@ -57,8 +58,9 @@ class GraphQLFactory(
         return RuntimeWiring.newRuntimeWiring()
             .type("Query") { builder ->
                 builder
-                    .dataFetcher("planets", planetsFetcher)
-                    .dataFetcher("planet", planetFetcher)
+                    .dataFetcher("getPlanets", getPlanetsFetcher)
+                    .dataFetcher("getPlanet", getPlanetFetcher)
+                    .dataFetcher("getPlanetByName", getPlanetByNameFetcher)
             }
             .type("Mutation") { builder ->
                 builder.dataFetcher("createPlanet", createPlanetFetcher)

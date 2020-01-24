@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture
 import javax.inject.Singleton
 
 @Singleton
-class PlanetsFetcher(
+class GetPlanetsFetcher(
     private val planetService: PlanetService,
     private val planetConverter: PlanetConverter
 ) : DataFetcher<List<PlanetDto>> {
@@ -24,13 +24,24 @@ class PlanetsFetcher(
 }
 
 @Singleton
-class PlanetFetcher(
+class GetPlanetFetcher(
     private val planetService: PlanetService,
     private val planetConverter: PlanetConverter
 ) : DataFetcher<PlanetDto> {
     override fun get(env: DataFetchingEnvironment): PlanetDto {
-        val id: Long = env.getArgument<String>("id").toLong()
+        val id = env.getArgument<String>("id").toLong()
         return planetConverter.toDto(planetService.getById(id))
+    }
+}
+
+@Singleton
+class GetPlanetByNameFetcher(
+    private val planetService: PlanetService,
+    private val planetConverter: PlanetConverter
+) : DataFetcher<PlanetDto> {
+    override fun get(env: DataFetchingEnvironment): PlanetDto {
+        val name = env.getArgument<String>("name")
+        return planetConverter.toDto(planetService.getByName(name))
     }
 }
 

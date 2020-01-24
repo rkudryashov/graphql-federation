@@ -4,8 +4,9 @@ schema {
 }
 
 type Query {
-    planets: [Planet!]!
-    planet(id: ID!): Planet!
+    getPlanets: [Planet!]!
+    getPlanet(id: ID!): Planet!
+    getPlanetByName(name: String!): Planet!
 }
 
 type Mutation {
