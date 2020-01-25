@@ -6,4 +6,6 @@ import io.micronautgraphqlfederation.satelliteservice.model.Satellite
 
 //todo move to class
 @Repository
-interface SatelliteRepository : CrudRepository<Satellite, Long>
+interface SatelliteRepository : CrudRepository<Satellite, Long> {
+    fun findByPlanetId(planetId: Long): List<Satellite>
+}

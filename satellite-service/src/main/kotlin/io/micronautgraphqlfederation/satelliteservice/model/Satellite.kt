@@ -10,5 +10,8 @@ class Satellite(
     val id: Long = 0,
 
     @Column
-    val name: String
+    val name: String,
+
+    @Column
+    val planetId: Long
 )

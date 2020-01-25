@@ -1,7 +1,3 @@
-schema {
-    query: Query
-}
-
 type Query {
     # todo by planet
     satellites: [Satellite!]!
@@ -11,4 +7,9 @@ type Query {
 type Satellite {
     id: ID!
     name: String!
+}
+
+type Planet @key(fields: "id") @extends {
+    id: ID! @external
+    satellites: [Satellite!]
 }

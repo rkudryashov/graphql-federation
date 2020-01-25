@@ -1,8 +1,3 @@
-schema {
-    query: Query
-    mutation: Mutation
-}
-
 type Query {
     getPlanets: [Planet!]!
     getPlanet(id: ID!): Planet!
@@ -13,32 +8,30 @@ type Mutation {
     createPlanet(name: String!, type: Type!, characteristics: CharacteristicsInput!): Planet!
 }
 
-interface Planet {
+type Planet @key(fields: "id") {
     id: ID!
     name: String!
+    # from an astronomical point of view
     type: Type!
-    # base characteristics
+    isRotatingAroundSun: Boolean! @deprecated(reason: "Now it is not in doubt. Do not use this field")
     characteristics: Characteristics!
-    isRotatingAroundSun: Boolean! @deprecated(reason: "Do not use this field")
-    # todo satellites
 }
 
-type UninhabitedPlanet implements Planet {
-    id: ID!
-    name: String!
-    type: Type!
-    characteristics: Characteristics!
-    isRotatingAroundSun: Boolean!
+interface Characteristics {
+    meanRadius: Float!
+    earthsMass: Float!
 }
 
-type InhabitedPlanet implements Planet {
-    id: ID!
-    name: String!
-    type: Type!
-    characteristics: Characteristics!
-    isRotatingAroundSun: Boolean!
+type InhabitedPlanetCharacteristics implements Characteristics {
+    meanRadius: Float!
+    earthsMass: Float!
     # in billions
     population: Float!
+}
+
+type UninhabitedPlanetCharacteristics implements Characteristics {
+    meanRadius: Float!
+    earthsMass: Float!
 }
 
 enum Type {
@@ -48,12 +41,8 @@ enum Type {
     DWARF_PLANET
 }
 
-type Characteristics {
-    meanRadius: Float!
-    earthsMass: Float!
-}
-
 input CharacteristicsInput {
     meanRadius: Float!
     earthsMass: Float!
+    population: Float
 }

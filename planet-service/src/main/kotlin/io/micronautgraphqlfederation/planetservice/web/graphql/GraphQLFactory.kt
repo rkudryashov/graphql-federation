@@ -1,12 +1,11 @@
 package io.micronautgraphqlfederation.planetservice.web.graphql
 
 import com.apollographql.federation.graphqljava.Federation
+import com.apollographql.federation.graphqljava.tracing.FederatedTracingInstrumentation
 import graphql.GraphQL
 import graphql.schema.TypeResolver
 import graphql.schema.idl.NaturalEnumValuesProvider
 import graphql.schema.idl.RuntimeWiring
-import graphql.schema.idl.SchemaGenerator
-import graphql.schema.idl.SchemaParser
 import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.Factory
 import io.micronaut.core.io.ResourceResolver
@@ -14,9 +13,8 @@ import io.micronautgraphqlfederation.planetservice.misc.CharacteristicsConverter
 import io.micronautgraphqlfederation.planetservice.model.Planet
 import io.micronautgraphqlfederation.planetservice.service.CharacteristicsService
 import io.micronautgraphqlfederation.planetservice.web.dto.CharacteristicsDto
-import io.micronautgraphqlfederation.planetservice.web.dto.InhabitedPlanetDto
-import io.micronautgraphqlfederation.planetservice.web.dto.PlanetDto
-import io.micronautgraphqlfederation.planetservice.web.dto.UninhabitedPlanetDto
+import io.micronautgraphqlfederation.planetservice.web.dto.InhabitedPlanetCharacteristicsDto
+import io.micronautgraphqlfederation.planetservice.web.dto.UninhabitedPlanetCharacteristicsDto
 import org.dataloader.BatchLoader
 import org.dataloader.DataLoader
 import org.dataloader.DataLoaderRegistry
@@ -39,19 +37,27 @@ class GraphQLFactory(
     @Singleton
     fun graphQL(resourceResolver: ResourceResolver): GraphQL {
         val schemaResource = resourceResolver.getResourceAsStream("classpath:schema.graphqls").get()
-        val typeDefinitionRegistry = SchemaParser().parse(InputStreamReader(schemaResource))
-        val graphQLSchema = SchemaGenerator().makeExecutableSchema(typeDefinitionRegistry, createRuntimeWiring())
-        val transformedGraphQLSchema = Federation.transform(graphQLSchema).build()
 
-        return GraphQL.newGraphQL(transformedGraphQLSchema).build()
+        val planetTypeResolver = TypeResolver { env ->
+            env.schema.getObjectType("Planet")
+        }
+
+        val transformedGraphQLSchema = Federation.transform(InputStreamReader(schemaResource), createRuntimeWiring())
+            .fetchEntities {}
+            .resolveEntityType(planetTypeResolver)
+            .build()
+
+        return GraphQL.newGraphQL(transformedGraphQLSchema)
+            .instrumentation(FederatedTracingInstrumentation())
+            .build()
     }
 
-    // todo how to create dataFetcher for interface?
     private fun createRuntimeWiring(): RuntimeWiring {
-        val planetResolver = TypeResolver { env ->
-            when (env.getObject() as PlanetDto) {
-                is InhabitedPlanetDto -> env.schema.getObjectType("InhabitedPlanet")
-                is UninhabitedPlanetDto -> env.schema.getObjectType("UninhabitedPlanet")
+        val characteristicsTypeResolver = TypeResolver { env ->
+            when (val characteristics = env.getObject() as CharacteristicsDto) {
+                is InhabitedPlanetCharacteristicsDto -> env.schema.getObjectType("InhabitedPlanetCharacteristics")
+                is UninhabitedPlanetCharacteristicsDto -> env.schema.getObjectType("UninhabitedPlanetCharacteristics")
+                else -> throw RuntimeException("Unexpected characteristics type: ${characteristics.javaClass.name}")
             }
         }
 
@@ -66,13 +72,10 @@ class GraphQLFactory(
                 builder.dataFetcher("createPlanet", createPlanetFetcher)
             }
             .type("Planet") { builder ->
-                builder.typeResolver(planetResolver)
-            }
-            .type("InhabitedPlanet") { builder ->
                 builder.dataFetcher("characteristics", characteristicsFetcher)
             }
-            .type("UninhabitedPlanet") { builder ->
-                builder.dataFetcher("characteristics", characteristicsFetcher)
+            .type("Characteristics") { builder ->
+                builder.typeResolver(characteristicsTypeResolver)
             }
             .type("Type") { builder ->
                 builder.enumValues(NaturalEnumValuesProvider(Planet.Type::class.java))

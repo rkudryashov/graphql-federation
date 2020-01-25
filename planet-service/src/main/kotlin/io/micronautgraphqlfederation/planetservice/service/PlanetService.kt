@@ -1,8 +1,6 @@
 package io.micronautgraphqlfederation.planetservice.service
 
-import io.micronautgraphqlfederation.planetservice.model.InhabitedPlanet
 import io.micronautgraphqlfederation.planetservice.model.Planet
-import io.micronautgraphqlfederation.planetservice.model.UninhabitedPlanet
 import io.micronautgraphqlfederation.planetservice.repository.PlanetRepository
 import javax.inject.Singleton
 
@@ -26,24 +24,12 @@ class PlanetService(
         type: Planet.Type,
         meanRadius: Double,
         earthsMass: Double,
-        population: Double? = null
+        population: Double = 0.0
     ): Planet {
-        val characteristics = characteristicsService.create(meanRadius, earthsMass)
+        val characteristics = characteristicsService.create(meanRadius, earthsMass, population)
 
-        when (population) {
-            null -> UninhabitedPlanet(
-                name = name,
-                type = type,
-                characteristicsId = characteristics.id
-            )
-            else -> InhabitedPlanet(
-                name = name,
-                type = type,
-                characteristicsId = characteristics.id,
-                population = population
-            )
-        }.also {
-            return repository.save(it)
+        return Planet(name = name, type = type, characteristicsId = characteristics.id).also {
+            repository.save(it)
         }
     }
 }

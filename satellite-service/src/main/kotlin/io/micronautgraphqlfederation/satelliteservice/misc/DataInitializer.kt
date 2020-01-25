@@ -10,11 +10,30 @@ import javax.inject.Singleton
 class DataInitializer(
     private val repository: SatelliteRepository
 ) {
+
     @EventListener
     fun init(event: StartupEvent?) {
-        // todo init satellites
-        val cities = listOf("Buenos Aires", "Auckland", "Wellington", "Christchurch", "Johannesburg")
-        cities.map { name -> Satellite(0, name) }
-            .forEach { Satellite: Satellite -> repository.save(Satellite) }
+        val planetsToSatellites = mapOf(
+            3L to listOf("Moon"),
+            4L to listOf("Phobos", "Deimos"),
+            5L to listOf("Io", "Europa", "Ganymede", "Callisto"),
+            6L to listOf("Titan"),
+            7L to listOf("Ariel", "Umbriel", "Titania", "Oberon", "Miranda"),
+            8L to listOf("Triton")
+        )
+
+        planetsToSatellites.forEach { pair ->
+            val planetId = pair.key
+            val satellites = pair.value
+
+            satellites.map { satelliteName ->
+                Satellite(
+                    name = satelliteName,
+                    planetId = planetId
+                )
+            }.forEach { satellite ->
+                repository.save(satellite)
+            }
+        }
     }
 }

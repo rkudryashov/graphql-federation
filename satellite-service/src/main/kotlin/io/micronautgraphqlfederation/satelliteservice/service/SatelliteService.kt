@@ -13,4 +13,6 @@ class SatelliteService(
 
     fun getById(id: Long): Satellite =
         repository.findById(id).orElseThrow { RuntimeException("Can't find satellite by id=$id") }
+
+    fun getByPlanetId(planetId: Long): List<Satellite> = repository.findByPlanetId(planetId)
 }

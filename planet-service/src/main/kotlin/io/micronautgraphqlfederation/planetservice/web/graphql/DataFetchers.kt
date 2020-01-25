@@ -79,7 +79,11 @@ class CreatePlanetFetcher(
         )
 
         val newPlanet = planetService.create(
-            name, type, characteristicsInputDto.meanRadius, characteristicsInputDto.earthsMass
+            name,
+            type,
+            characteristicsInputDto.meanRadius,
+            characteristicsInputDto.earthsMass,
+            characteristicsInputDto.population
         )
 
         return planetConverter.toDto(newPlanet)
