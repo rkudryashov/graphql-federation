@@ -1,0 +1,4 @@
+= Federation of GraphQL microservices on the JVM
+
+image:https://travis-ci.com/rkudryashov/graphql-federation.svg?branch=master[Latest release, link=https://travis-ci.com/rkudryashov/graphql-federation]
+image:https://codecov.io/gh/rkudryashov/graphql-federation/branch/master/graph/badge.svg[Code coverage, link=https://codecov.io/gh/rkudryashov/graphql-federation]
