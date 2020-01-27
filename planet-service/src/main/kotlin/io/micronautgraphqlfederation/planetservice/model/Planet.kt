@@ -9,7 +9,7 @@ class Planet(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
-    @Column
+    @Column(unique = true)
     val name: String,
 
     @Column
