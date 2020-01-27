@@ -1,9 +1,9 @@
 package io.graphqlfederation.satelliteservice.misc
 
-import io.micronaut.context.event.StartupEvent
-import io.micronaut.runtime.event.annotation.EventListener
 import io.graphqlfederation.satelliteservice.model.Satellite
 import io.graphqlfederation.satelliteservice.repository.SatelliteRepository
+import io.micronaut.context.event.StartupEvent
+import io.micronaut.runtime.event.annotation.EventListener
 import javax.inject.Singleton
 
 @Singleton

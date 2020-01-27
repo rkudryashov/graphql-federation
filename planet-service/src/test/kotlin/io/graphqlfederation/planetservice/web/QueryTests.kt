@@ -1,10 +1,10 @@
 package io.graphqlfederation.planetservice.web
 
 import com.fasterxml.jackson.core.type.TypeReference
-import io.micronaut.test.annotation.MicronautTest
 import io.graphqlfederation.planetservice.model.Planet
 import io.graphqlfederation.planetservice.service.GraphQLClient
 import io.graphqlfederation.planetservice.web.dto.PlanetDto
+import io.micronaut.test.annotation.MicronautTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test

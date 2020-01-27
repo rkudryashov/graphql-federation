@@ -1,9 +1,9 @@
 package io.graphqlfederation.planetservice.misc
 
-import io.micronaut.context.event.StartupEvent
-import io.micronaut.runtime.event.annotation.EventListener
 import io.graphqlfederation.planetservice.model.Planet
 import io.graphqlfederation.planetservice.service.PlanetService
+import io.micronaut.context.event.StartupEvent
+import io.micronaut.runtime.event.annotation.EventListener
 import javax.inject.Singleton
 
 @Singleton

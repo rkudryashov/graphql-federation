@@ -1,9 +1,9 @@
 package io.graphqlfederation.planetservice.repository
 
-import io.micronaut.data.annotation.Repository
-import io.micronaut.data.repository.CrudRepository
 import io.graphqlfederation.planetservice.model.Characteristics
 import io.graphqlfederation.planetservice.model.Planet
+import io.micronaut.data.annotation.Repository
+import io.micronaut.data.repository.CrudRepository
 
 @Repository
 interface PlanetRepository : CrudRepository<Planet, Long> {

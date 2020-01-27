@@ -2,9 +2,9 @@ package io.graphqlfederation.planetservice.service
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.micronaut.context.annotation.Property
 import io.graphqlfederation.planetservice.web.dto.GraphQLRequest
 import io.graphqlfederation.planetservice.web.dto.GraphQLResponse
+import io.micronaut.context.annotation.Property
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient

@@ -1,8 +1,8 @@
 package io.graphqlfederation.satelliteservice.repository
 
+import io.graphqlfederation.satelliteservice.model.Satellite
 import io.micronaut.data.annotation.Repository
 import io.micronaut.data.repository.CrudRepository
-import io.graphqlfederation.satelliteservice.model.Satellite
 
 //todo move to class
 @Repository

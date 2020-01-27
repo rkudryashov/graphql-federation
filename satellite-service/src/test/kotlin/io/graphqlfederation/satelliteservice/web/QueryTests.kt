@@ -1,9 +1,9 @@
 package io.graphqlfederation.satelliteservice.web
 
 import com.fasterxml.jackson.core.type.TypeReference
-import io.micronaut.test.annotation.MicronautTest
 import io.graphqlfederation.satelliteservice.service.GraphQLClient
 import io.graphqlfederation.satelliteservice.web.dto.SatelliteDto
+import io.micronaut.test.annotation.MicronautTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
