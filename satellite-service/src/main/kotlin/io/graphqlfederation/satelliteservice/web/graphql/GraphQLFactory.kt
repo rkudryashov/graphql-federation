@@ -4,16 +4,19 @@ import com.apollographql.federation.graphqljava.Federation
 import com.apollographql.federation.graphqljava._Entity
 import com.apollographql.federation.graphqljava.tracing.FederatedTracingInstrumentation
 import graphql.GraphQL
+import graphql.analysis.MaxQueryComplexityInstrumentation
+import graphql.analysis.MaxQueryDepthInstrumentation
+import graphql.execution.instrumentation.ChainedInstrumentation
 import graphql.schema.DataFetcher
 import graphql.schema.TypeResolver
 import graphql.schema.idl.RuntimeWiring
 import graphql.schema.idl.TypeRuntimeWiring
-import io.micronaut.context.annotation.Bean
-import io.micronaut.context.annotation.Factory
-import io.micronaut.core.io.ResourceResolver
 import io.graphqlfederation.satelliteservice.misc.SatelliteConverter
 import io.graphqlfederation.satelliteservice.service.SatelliteService
 import io.graphqlfederation.satelliteservice.web.dto.PlanetDto
+import io.micronaut.context.annotation.Bean
+import io.micronaut.context.annotation.Factory
+import io.micronaut.core.io.ResourceResolver
 import org.slf4j.LoggerFactory
 import java.io.InputStreamReader
 import javax.inject.Singleton
@@ -35,14 +38,17 @@ class GraphQLFactory(
         val schemaResource = resourceResolver.getResourceAsStream("classpath:schema.graphqls").get()
 
         val entitiesDataFetcher = DataFetcher { env ->
-            val planetsData = env.getArgument<List<Map<String, Any>>>(_Entity.argumentName)
-            planetsData.map { values ->
-                val id = (values["id"] as String).toLong()
-                val satellites = satelliteService.getByPlanetId(id)
-                PlanetDto(
-                    id = id,
-                    satellites = satellites.map { satelliteConverter.toDto(it) }
-                )
+            val representations = env.getArgument<List<Map<String, Any>>>(_Entity.argumentName)
+
+            representations.map { values ->
+                if ("Planet" == values["__typename"]) {
+                    val id = (values["id"] as String).toLong()
+                    val satellites = satelliteService.getByPlanetId(id)
+                    PlanetDto(
+                        id = id,
+                        satellites = satellites.map { satelliteConverter.toDto(it) }
+                    )
+                }
             }
         }
 
@@ -56,8 +62,15 @@ class GraphQLFactory(
             .build()
 
         return GraphQL.newGraphQL(transformedGraphQLSchema)
-            // todo how to use it?
-            .instrumentation(FederatedTracingInstrumentation())
+            .instrumentation(
+                ChainedInstrumentation(
+                    listOf(
+                        FederatedTracingInstrumentation(),
+                        MaxQueryComplexityInstrumentation(20),
+                        MaxQueryDepthInstrumentation(5)
+                    )
+                )
+            )
             .build()
     }
 

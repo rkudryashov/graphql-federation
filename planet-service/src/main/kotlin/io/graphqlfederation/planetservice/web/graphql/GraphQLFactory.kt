@@ -3,18 +3,21 @@ package io.graphqlfederation.planetservice.web.graphql
 import com.apollographql.federation.graphqljava.Federation
 import com.apollographql.federation.graphqljava.tracing.FederatedTracingInstrumentation
 import graphql.GraphQL
+import graphql.analysis.MaxQueryComplexityInstrumentation
+import graphql.analysis.MaxQueryDepthInstrumentation
+import graphql.execution.instrumentation.ChainedInstrumentation
 import graphql.schema.TypeResolver
 import graphql.schema.idl.NaturalEnumValuesProvider
 import graphql.schema.idl.RuntimeWiring
-import io.micronaut.context.annotation.Bean
-import io.micronaut.context.annotation.Factory
-import io.micronaut.core.io.ResourceResolver
 import io.graphqlfederation.planetservice.misc.CharacteristicsConverter
 import io.graphqlfederation.planetservice.model.Planet
 import io.graphqlfederation.planetservice.service.CharacteristicsService
 import io.graphqlfederation.planetservice.web.dto.CharacteristicsDto
 import io.graphqlfederation.planetservice.web.dto.InhabitedPlanetCharacteristicsDto
 import io.graphqlfederation.planetservice.web.dto.UninhabitedPlanetCharacteristicsDto
+import io.micronaut.context.annotation.Bean
+import io.micronaut.context.annotation.Factory
+import io.micronaut.core.io.ResourceResolver
 import org.dataloader.BatchLoader
 import org.dataloader.DataLoader
 import org.dataloader.DataLoaderRegistry
@@ -48,7 +51,15 @@ class GraphQLFactory(
             .build()
 
         return GraphQL.newGraphQL(transformedGraphQLSchema)
-            .instrumentation(FederatedTracingInstrumentation())
+            .instrumentation(
+                ChainedInstrumentation(
+                    listOf(
+                        FederatedTracingInstrumentation(),
+                        MaxQueryComplexityInstrumentation(20),
+                        MaxQueryDepthInstrumentation(5)
+                    )
+                )
+            )
             .build()
     }
 
