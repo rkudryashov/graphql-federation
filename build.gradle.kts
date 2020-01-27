@@ -1,5 +1,5 @@
 allprojects {
-    group = "io.micronautgraphqlfederation"
+    group = "io.graphqlfederation"
 }
 
 subprojects {

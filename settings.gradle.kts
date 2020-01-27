@@ -1,4 +1,4 @@
-rootProject.name = "micronaut-graphql-federation"
+rootProject.name = "graphql-federation"
 
 include(
     "planet-service",
