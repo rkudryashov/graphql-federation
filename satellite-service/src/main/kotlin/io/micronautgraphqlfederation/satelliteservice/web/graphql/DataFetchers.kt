@@ -8,7 +8,7 @@ import io.micronautgraphqlfederation.satelliteservice.web.dto.SatelliteDto
 import javax.inject.Singleton
 
 @Singleton
-class SatellitesFetcher(
+class GetSatellitesFetcher(
     private val satelliteService: SatelliteService,
     private val satelliteConverter: SatelliteConverter
 ) : DataFetcher<List<SatelliteDto>> {
@@ -17,7 +17,7 @@ class SatellitesFetcher(
 }
 
 @Singleton
-class SatelliteFetcher(
+class GetSatelliteFetcher(
     private val satelliteService: SatelliteService,
     private val satelliteConverter: SatelliteConverter
 ) : DataFetcher<SatelliteDto> {
@@ -26,5 +26,3 @@ class SatelliteFetcher(
         return satelliteConverter.toDto(satelliteService.getById(id))
     }
 }
-
-// todo fetcher by name

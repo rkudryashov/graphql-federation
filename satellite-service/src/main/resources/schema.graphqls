@@ -1,7 +1,6 @@
 type Query {
-    # todo by planet
-    satellites: [Satellite!]!
-    satellite(id: ID!): Satellite!
+    getSatellites: [Satellite!]!
+    getSatellite(id: ID!): Satellite!
 }
 
 type Satellite {

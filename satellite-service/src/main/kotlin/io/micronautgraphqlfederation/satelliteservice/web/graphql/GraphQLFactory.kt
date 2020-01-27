@@ -20,8 +20,8 @@ import javax.inject.Singleton
 
 @Factory
 class GraphQLFactory(
-    private val satellitesFetcher: SatellitesFetcher,
-    private val satelliteFetcher: SatelliteFetcher,
+    private val getSatellitesFetcher: GetSatellitesFetcher,
+    private val getSatelliteFetcher: GetSatelliteFetcher,
     private val satelliteService: SatelliteService,
     private val satelliteConverter: SatelliteConverter
 ) {
@@ -64,8 +64,8 @@ class GraphQLFactory(
     private fun createRuntimeWiring(): RuntimeWiring = RuntimeWiring.newRuntimeWiring()
         .type(
             TypeRuntimeWiring.newTypeWiring("Query")
-                .dataFetcher("satellites", satellitesFetcher)
-                .dataFetcher("satellite", satelliteFetcher)
+                .dataFetcher("getSatellites", getSatellitesFetcher)
+                .dataFetcher("getSatellite", getSatelliteFetcher)
         )
         .build()
 }
