@@ -1,0 +1,33 @@
+micronaut:
+  server:
+    port: 8081
+
+datasources:
+  default:
+    url: jdbc:h2:mem:devDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ''
+    schema-generate: CREATE_DROP
+    dialect: H2
+
+jpa:
+  default:
+    properties:
+      hibernate:
+        bytecode:
+          provider: none
+        hbm2ddl:
+          auto: update
+        show_sql: true
+
+graphql:
+  graphiql.enabled: true
+
+# In real life secret should NOT be under source control (instead of it, for example, in environment variable).
+# It is here just for simplicity.
+auth:
+  token:
+    secret: "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
+    # in minutes
+    validityTime: 60

@@ -1,0 +1,17 @@
+type Query {
+    validateToken(token: String!): Boolean!
+}
+
+type Mutation {
+    signIn(data: SignInData!): SignInResponse!
+}
+
+input SignInData {
+    username: String!
+    password: String!
+}
+
+type SignInResponse {
+    username: String!
+    token: String!
+}

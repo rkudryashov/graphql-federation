@@ -1,6 +1,7 @@
 rootProject.name = "graphql-federation"
 
 include(
+    "auth-service",
     "planet-service",
     "satellite-service"
 )
