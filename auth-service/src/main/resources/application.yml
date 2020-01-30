@@ -1,6 +1,24 @@
 micronaut:
   server:
     port: 8081
+  security:
+    enabled: true
+    intercept-url-map:
+      - pattern: /graphql
+        httpMethod: POST
+        access:
+          - isAnonymous()
+    token:
+      jwt:
+        enabled: true
+        signatures:
+          secret:
+            generator:
+              base64: true
+              # In real life secret should NOT be under source control (instead of it, for example, in environment variable).
+              # It is here just for simplicity.
+              secret: 'TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZWxpdA=='
+              jws-algorithm: HS256
 
 datasources:
   default:
@@ -23,11 +41,3 @@ jpa:
 
 graphql:
   graphiql.enabled: true
-
-# In real life secret should NOT be under source control (instead of it, for example, in environment variable).
-# It is here just for simplicity.
-auth:
-  token:
-    secret: "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
-    # in minutes
-    validityTime: 60

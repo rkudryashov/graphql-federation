@@ -12,6 +12,7 @@ interface GenericConverter<E, D> {
 class SatelliteConverter : GenericConverter<Satellite, SatelliteDto> {
     override fun toDto(entity: Satellite): SatelliteDto = SatelliteDto(
         id = entity.id,
-        name = entity.name
+        name = entity.name,
+        lifeExists = Satellite.LifeExists.NO_DATA
     )
 }

@@ -33,7 +33,9 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     implementation("io.micronaut:micronaut-http-server-netty")
-    implementation("io.micronaut.graphql:micronaut-graphql")
+    implementation("io.micronaut.graphql:micronaut-graphql") {
+        exclude(group = "com.graphql-java", module = "graphql-java")
+    }
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa:$micronautDataVersion")
     implementation("com.apollographql.federation:federation-graphql-java-support:$apolloFederationJavaVersion")
     implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")

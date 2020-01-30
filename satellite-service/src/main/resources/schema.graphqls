@@ -6,9 +6,16 @@ type Query {
 type Satellite {
     id: ID!
     name: String!
+    lifeExists: LifeExists!
 }
 
 type Planet @key(fields: "id") @extends {
     id: ID! @external
     satellites: [Satellite!]
+}
+
+enum LifeExists {
+    YES,
+    OPEN_QUESTION,
+    NO_DATA
 }

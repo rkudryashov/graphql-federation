@@ -13,5 +13,15 @@ class Satellite(
     val name: String,
 
     @Column
+    val lifeExists: LifeExists,
+
+    @Column
     val planetId: Long
-)
+) {
+
+    enum class LifeExists {
+        YES,
+        OPEN_QUESTION,
+        NO_DATA
+    }
+}

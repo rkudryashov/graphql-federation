@@ -6,7 +6,6 @@ val kotlinVersion: String by project
 val micronautVersion: String by project
 val micronautDataVersion: String by project
 val apolloFederationJavaVersion: String by project
-val jjwtVersion: String by project
 val okhttpVersion: String by project
 val logbackVersion: String by project
 val junitVersion: String by project
@@ -35,14 +34,14 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     implementation("io.micronaut:micronaut-http-server-netty")
-    implementation("io.micronaut.graphql:micronaut-graphql")
+    implementation("io.micronaut:micronaut-security-jwt")
+    implementation("io.micronaut.graphql:micronaut-graphql") {
+        exclude(group = "com.graphql-java", module = "graphql-java")
+    }
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa:$micronautDataVersion")
     implementation("com.apollographql.federation:federation-graphql-java-support:$apolloFederationJavaVersion")
     implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("io.jsonwebtoken:jjwt-api:$jjwtVersion")
-    runtimeOnly("io.jsonwebtoken:jjwt-impl:$jjwtVersion")
-    runtimeOnly("io.jsonwebtoken:jjwt-jackson:$jjwtVersion")
     runtimeOnly("io.micronaut.configuration:micronaut-jdbc-hikari")
     runtimeOnly("com.h2database:h2")
     runtimeOnly("ch.qos.logback:logback-classic:$logbackVersion")

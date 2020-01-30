@@ -4,13 +4,10 @@ import com.apollographql.federation.graphqljava.Federation
 import com.apollographql.federation.graphqljava._Entity
 import com.apollographql.federation.graphqljava.tracing.FederatedTracingInstrumentation
 import graphql.GraphQL
-import graphql.analysis.MaxQueryComplexityInstrumentation
-import graphql.analysis.MaxQueryDepthInstrumentation
 import graphql.execution.instrumentation.ChainedInstrumentation
 import graphql.schema.DataFetcher
 import graphql.schema.TypeResolver
 import graphql.schema.idl.RuntimeWiring
-import graphql.schema.idl.TypeRuntimeWiring
 import io.graphqlfederation.satelliteservice.misc.SatelliteConverter
 import io.graphqlfederation.satelliteservice.service.SatelliteService
 import io.graphqlfederation.satelliteservice.web.dto.PlanetDto
@@ -25,6 +22,7 @@ import javax.inject.Singleton
 class GraphQLFactory(
     private val getSatellitesFetcher: GetSatellitesFetcher,
     private val getSatelliteFetcher: GetSatelliteFetcher,
+    private val lifeExistsFetcher: LifeExistsFetcher,
     private val satelliteService: SatelliteService,
     private val satelliteConverter: SatelliteConverter
 ) {
@@ -65,9 +63,7 @@ class GraphQLFactory(
             .instrumentation(
                 ChainedInstrumentation(
                     listOf(
-                        FederatedTracingInstrumentation(),
-                        MaxQueryComplexityInstrumentation(20),
-                        MaxQueryDepthInstrumentation(5)
+                        FederatedTracingInstrumentation()
                     )
                 )
             )
@@ -75,10 +71,14 @@ class GraphQLFactory(
     }
 
     private fun createRuntimeWiring(): RuntimeWiring = RuntimeWiring.newRuntimeWiring()
-        .type(
-            TypeRuntimeWiring.newTypeWiring("Query")
+        .type("Query") { builder ->
+            builder
                 .dataFetcher("getSatellites", getSatellitesFetcher)
                 .dataFetcher("getSatellite", getSatelliteFetcher)
-        )
+        }
+        .type("Satellite") { builder ->
+            builder
+                .dataFetcher("lifeExists", lifeExistsFetcher)
+        }
         .build()
 }

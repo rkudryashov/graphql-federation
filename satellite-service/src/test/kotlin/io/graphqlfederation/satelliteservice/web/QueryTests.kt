@@ -28,7 +28,7 @@ class QueryTests {
 
         val response = graphQLClient.sendRequest(
             query,
-            object : TypeReference<List<SatelliteDto>>() {})
+            object : TypeReference<List<TestSatelliteDto>>() {})
 
         assertThat(response, hasSize(14))
         assertThat(
@@ -53,7 +53,7 @@ class QueryTests {
 
         val response = graphQLClient.sendRequest(
             query,
-            object : TypeReference<SatelliteDto>() {})
+            object : TypeReference<TestSatelliteDto>() {})
 
         assertThat(
             response, allOf(

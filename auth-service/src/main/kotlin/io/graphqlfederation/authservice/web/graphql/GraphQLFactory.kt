@@ -28,8 +28,7 @@ class GraphQLFactory(
 
     private fun createRuntimeWiring() = RuntimeWiring.newRuntimeWiring()
         .type("Query") { builder ->
-            builder
-                .dataFetcher("validateToken", validateTokenFetcher)
+            builder.dataFetcher("validateToken", validateTokenFetcher)
         }
         .type("Mutation") { builder ->
             builder.dataFetcher("signIn", signInFetcher)

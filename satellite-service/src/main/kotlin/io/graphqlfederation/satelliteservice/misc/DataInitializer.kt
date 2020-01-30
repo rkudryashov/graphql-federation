@@ -1,39 +1,32 @@
 package io.graphqlfederation.satelliteservice.misc
 
-import io.graphqlfederation.satelliteservice.model.Satellite
-import io.graphqlfederation.satelliteservice.repository.SatelliteRepository
+import io.graphqlfederation.satelliteservice.model.Satellite.LifeExists.NO_DATA
+import io.graphqlfederation.satelliteservice.model.Satellite.LifeExists.OPEN_QUESTION
+import io.graphqlfederation.satelliteservice.service.SatelliteService
 import io.micronaut.context.event.StartupEvent
 import io.micronaut.runtime.event.annotation.EventListener
 import javax.inject.Singleton
 
 @Singleton
 class DataInitializer(
-    private val repository: SatelliteRepository
+    private val satelliteService: SatelliteService
 ) {
 
     @EventListener
     fun init(event: StartupEvent?) {
-        val planetsToSatellites = mapOf(
-            3L to listOf("Moon"),
-            4L to listOf("Phobos", "Deimos"),
-            5L to listOf("Io", "Europa", "Ganymede", "Callisto"),
-            6L to listOf("Titan"),
-            7L to listOf("Ariel", "Umbriel", "Titania", "Oberon", "Miranda"),
-            8L to listOf("Triton")
-        )
-
-        planetsToSatellites.forEach { pair ->
-            val planetId = pair.key
-            val satellites = pair.value
-
-            satellites.map { satelliteName ->
-                Satellite(
-                    name = satelliteName,
-                    planetId = planetId
-                )
-            }.forEach { satellite ->
-                repository.save(satellite)
-            }
-        }
+        satelliteService.create("Moon", OPEN_QUESTION, 3L)
+        satelliteService.create("Phobos", NO_DATA, 4L)
+        satelliteService.create("Deimos", NO_DATA, 4L)
+        satelliteService.create("Io", OPEN_QUESTION, 5L)
+        satelliteService.create("Europa", OPEN_QUESTION, 5L)
+        satelliteService.create("Ganymede", OPEN_QUESTION, 5L)
+        satelliteService.create("Callisto", OPEN_QUESTION, 5L)
+        satelliteService.create("Titan", OPEN_QUESTION, 6L)
+        satelliteService.create("Ariel", NO_DATA, 7L)
+        satelliteService.create("Umbriel", NO_DATA, 7L)
+        satelliteService.create("Titania", NO_DATA, 7L)
+        satelliteService.create("Oberon", NO_DATA, 7L)
+        satelliteService.create("Miranda", NO_DATA, 7L)
+        satelliteService.create("Triton", NO_DATA, 8L)
     }
 }
