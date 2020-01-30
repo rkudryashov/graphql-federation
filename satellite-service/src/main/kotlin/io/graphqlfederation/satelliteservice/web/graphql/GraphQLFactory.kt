@@ -4,6 +4,8 @@ import com.apollographql.federation.graphqljava.Federation
 import com.apollographql.federation.graphqljava._Entity
 import com.apollographql.federation.graphqljava.tracing.FederatedTracingInstrumentation
 import graphql.GraphQL
+import graphql.execution.AsyncExecutionStrategy
+import graphql.execution.AsyncSerialExecutionStrategy
 import graphql.execution.instrumentation.ChainedInstrumentation
 import graphql.schema.DataFetcher
 import graphql.schema.TypeResolver
@@ -24,7 +26,8 @@ class GraphQLFactory(
     private val getSatelliteFetcher: GetSatelliteFetcher,
     private val lifeExistsFetcher: LifeExistsFetcher,
     private val satelliteService: SatelliteService,
-    private val satelliteConverter: SatelliteConverter
+    private val satelliteConverter: SatelliteConverter,
+    private val customDataFetcherExceptionHandler: CustomDataFetcherExceptionHandler
 ) {
 
     // todo use
@@ -60,6 +63,8 @@ class GraphQLFactory(
             .build()
 
         return GraphQL.newGraphQL(transformedGraphQLSchema)
+            .queryExecutionStrategy(AsyncExecutionStrategy(customDataFetcherExceptionHandler))
+            .mutationExecutionStrategy(AsyncSerialExecutionStrategy(customDataFetcherExceptionHandler))
             .instrumentation(
                 ChainedInstrumentation(
                     listOf(
