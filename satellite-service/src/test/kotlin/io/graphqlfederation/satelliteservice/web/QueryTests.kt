@@ -2,7 +2,6 @@ package io.graphqlfederation.satelliteservice.web
 
 import com.fasterxml.jackson.core.type.TypeReference
 import io.graphqlfederation.satelliteservice.service.GraphQLClient
-import io.graphqlfederation.satelliteservice.web.dto.SatelliteDto
 import io.micronaut.test.annotation.MicronautTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -28,7 +27,8 @@ class QueryTests {
 
         val response = graphQLClient.sendRequest(
             query,
-            object : TypeReference<List<TestSatelliteDto>>() {})
+            object : TypeReference<List<TestSatelliteDto>>() {}
+        )
 
         assertThat(response, hasSize(14))
         assertThat(
@@ -53,7 +53,8 @@ class QueryTests {
 
         val response = graphQLClient.sendRequest(
             query,
-            object : TypeReference<TestSatelliteDto>() {})
+            object : TypeReference<TestSatelliteDto>() {}
+        )
 
         assertThat(
             response, allOf(

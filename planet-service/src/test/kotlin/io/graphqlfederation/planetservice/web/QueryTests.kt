@@ -37,7 +37,8 @@ class QueryTests {
 
         val response = graphQLClient.sendRequest(
             query,
-            object : TypeReference<List<PlanetDto>>() {})
+            object : TypeReference<List<PlanetDto>>() {}
+        )
 
         assertThat(response, hasSize(8))
         assertThat(
@@ -76,7 +77,8 @@ class QueryTests {
 
         val response = graphQLClient.sendRequest(
             query,
-            object : TypeReference<PlanetDto>() {})
+            object : TypeReference<PlanetDto>() {}
+        )
 
         assertThat(
             response, allOf(
@@ -115,7 +117,8 @@ class QueryTests {
 
         val response = graphQLClient.sendRequest(
             query,
-            object : TypeReference<PlanetDto>() {})
+            object : TypeReference<PlanetDto>() {}
+        )
 
         assertThat(
             response, allOf(

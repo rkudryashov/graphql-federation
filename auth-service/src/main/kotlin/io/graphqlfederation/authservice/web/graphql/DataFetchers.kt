@@ -21,7 +21,7 @@ class SignInFetcher(
         val tokenPublisher = authService.authenticate(username, signInRequest.password)
         return Flowable.fromPublisher(tokenPublisher)
             .map { token -> SignInResponseDto(username, token) }
-                // graphql-java doesn't support rxjava, so it is needed to block
+            // graphql-java doesn't support rxjava, so it is needed to block
             .blockingSingle()
     }
 }
@@ -32,7 +32,6 @@ class ValidateTokenFetcher(
 ) : DataFetcher<Boolean> {
     override fun get(env: DataFetchingEnvironment): Boolean {
         val token = env.getArgument<String>("token")
-        authService.validateToken(token)
-        return true
+        return authService.validateToken(token)
     }
 }

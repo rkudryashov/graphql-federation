@@ -38,7 +38,7 @@ class MutationTests {
         val earthsMass = 0.03
         val population = 0.0001
 
-        val query = """
+        val mutation = """
               mutation {
                 createPlanet (name: "$name", type: $type, characteristics: { meanRadius: $meanRadius, earthsMass: $earthsMass, population: $population}) {
                     id
@@ -56,8 +56,9 @@ class MutationTests {
         """.trimIndent()
 
         val response = graphQLClient.sendRequest(
-            query,
-            object : TypeReference<PlanetDto>() {})
+            mutation,
+            object : TypeReference<PlanetDto>() {}
+        )
 
         assertEquals(planetCount + 1, planetRepository.count())
 
@@ -93,7 +94,7 @@ class MutationTests {
         val meanRadius = 10.2
         val earthsMass = 0.03
 
-        val query = """
+        val mutation = """
               mutation {
                 createPlanet (name: "$name", type: $type, characteristics: { meanRadius: $meanRadius, earthsMass: $earthsMass }) {
                     id
@@ -108,8 +109,9 @@ class MutationTests {
         """.trimIndent()
 
         val response = graphQLClient.sendRequest(
-            query,
-            object : TypeReference<PlanetDto>() {})
+            mutation,
+            object : TypeReference<PlanetDto>() {}
+        )
 
         assertEquals(planetCount + 1, planetRepository.count())
 
@@ -143,7 +145,7 @@ class MutationTests {
         val meanRadius = 107.5
         val earthsMass = 15.1
 
-        val query = """
+        val mutation = """
               mutation {
                 createPlanet (name: "$name", type: $type, characteristics: { meanRadius: $meanRadius, earthsMass: $earthsMass }) {
                     id
@@ -162,8 +164,9 @@ class MutationTests {
 
         val exception = assertThrows<RuntimeException>("Should throw an Exception") {
             graphQLClient.sendRequest(
-                query,
-                object : TypeReference<PlanetDto>() {})
+                mutation,
+                object : TypeReference<PlanetDto>() {}
+            )
         }
 
         assertThat(
