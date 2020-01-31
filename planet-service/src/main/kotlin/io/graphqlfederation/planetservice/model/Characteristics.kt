@@ -23,6 +23,7 @@ class InhabitedPlanetCharacteristics(
     id: Long = 0,
     meanRadius: Double,
     earthsMass: Double,
+    @Column
     val population: Double
 ) : Characteristics(id, meanRadius, earthsMass)
 

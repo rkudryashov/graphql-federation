@@ -12,7 +12,10 @@ class CharacteristicsService(
 ) {
 
     fun create(meanRadius: Double, earthsMass: Double, population: Double) = when (population) {
-        0.0 -> UninhabitedPlanetCharacteristics(meanRadius = meanRadius, earthsMass = earthsMass)
+        0.0 -> UninhabitedPlanetCharacteristics(
+            meanRadius = meanRadius,
+            earthsMass = earthsMass
+        )
         else -> InhabitedPlanetCharacteristics(
             meanRadius = meanRadius,
             earthsMass = earthsMass,

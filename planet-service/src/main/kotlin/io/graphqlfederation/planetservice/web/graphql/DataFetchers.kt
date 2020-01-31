@@ -89,5 +89,3 @@ class CreatePlanetFetcher(
         return planetConverter.toDto(newPlanet)
     }
 }
-
-// todo fetcher by name

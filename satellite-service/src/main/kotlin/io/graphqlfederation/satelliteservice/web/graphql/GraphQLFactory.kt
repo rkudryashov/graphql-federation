@@ -6,7 +6,6 @@ import com.apollographql.federation.graphqljava.tracing.FederatedTracingInstrume
 import graphql.GraphQL
 import graphql.execution.AsyncExecutionStrategy
 import graphql.execution.AsyncSerialExecutionStrategy
-import graphql.execution.instrumentation.ChainedInstrumentation
 import graphql.schema.DataFetcher
 import graphql.schema.TypeResolver
 import graphql.schema.idl.RuntimeWiring
@@ -66,13 +65,7 @@ class GraphQLFactory(
         return GraphQL.newGraphQL(transformedGraphQLSchema)
             .queryExecutionStrategy(AsyncExecutionStrategy(customDataFetcherExceptionHandler))
             .mutationExecutionStrategy(AsyncSerialExecutionStrategy(customDataFetcherExceptionHandler))
-            .instrumentation(
-                ChainedInstrumentation(
-                    listOf(
-                        FederatedTracingInstrumentation()
-                    )
-                )
-            )
+            .instrumentation(FederatedTracingInstrumentation())
             .build()
     }
 
