@@ -3,6 +3,7 @@ package io.graphqlfederation.satelliteservice.service
 import io.graphqlfederation.satelliteservice.model.Satellite
 import io.graphqlfederation.satelliteservice.repository.SatelliteRepository
 import io.micronaut.security.utils.SecurityService
+import java.time.LocalDate
 import javax.inject.Singleton
 
 @Singleton
@@ -11,10 +12,16 @@ class SatelliteService(
     private val securityService: SecurityService
 ) {
 
-    fun create(name: String, lifeExists: Satellite.LifeExists, planetId: Long) = repository.save(
+    fun create(
+        name: String,
+        lifeExists: Satellite.LifeExists,
+        planetId: Long,
+        firstSpacecraftLandingDate: LocalDate? = null
+    ) = repository.save(
         Satellite(
             name = name,
             lifeExists = lifeExists,
+            firstSpacecraftLandingDate = firstSpacecraftLandingDate,
             planetId = planetId
         )
     )

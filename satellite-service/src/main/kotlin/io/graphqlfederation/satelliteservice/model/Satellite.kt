@@ -1,5 +1,6 @@
 package io.graphqlfederation.satelliteservice.model
 
+import java.time.LocalDate
 import javax.persistence.*
 
 @Entity
@@ -14,6 +15,9 @@ class Satellite(
 
     @Column
     val lifeExists: LifeExists,
+
+    @Column
+    val firstSpacecraftLandingDate: LocalDate?,
 
     @Column
     val planetId: Long

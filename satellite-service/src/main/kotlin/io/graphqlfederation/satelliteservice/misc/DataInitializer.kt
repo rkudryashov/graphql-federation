@@ -5,6 +5,8 @@ import io.graphqlfederation.satelliteservice.model.Satellite.LifeExists.OPEN_QUE
 import io.graphqlfederation.satelliteservice.service.SatelliteService
 import io.micronaut.context.event.StartupEvent
 import io.micronaut.runtime.event.annotation.EventListener
+import java.time.LocalDate
+import java.time.Month
 import javax.inject.Singleton
 
 @Singleton
@@ -14,7 +16,7 @@ class DataInitializer(
 
     @EventListener
     fun init(event: StartupEvent?) {
-        satelliteService.create("Moon", OPEN_QUESTION, 3L)
+        satelliteService.create("Moon", OPEN_QUESTION, 3L, LocalDate.of(1959, Month.SEPTEMBER, 13))
         satelliteService.create("Phobos", NO_DATA, 4L)
         satelliteService.create("Deimos", NO_DATA, 4L)
         satelliteService.create("Io", OPEN_QUESTION, 5L)

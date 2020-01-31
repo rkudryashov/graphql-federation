@@ -8,6 +8,7 @@ type Satellite {
     id: ID!
     name: String!
     lifeExists: LifeExists!
+    firstSpacecraftLandingDate: Date
 }
 
 type Planet @key(fields: "id") @extends {
@@ -20,3 +21,5 @@ enum LifeExists {
     OPEN_QUESTION,
     NO_DATA
 }
+
+scalar Date

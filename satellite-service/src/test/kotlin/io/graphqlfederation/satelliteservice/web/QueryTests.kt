@@ -7,6 +7,8 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import java.time.LocalDate
+import java.time.Month
 import javax.inject.Inject
 
 @MicronautTest
@@ -22,6 +24,7 @@ class QueryTests {
               getSatellites {
                 id
                 name
+                firstSpacecraftLandingDate
               }
             }
         """.trimIndent()
@@ -34,8 +37,17 @@ class QueryTests {
         assertThat(response, hasSize(14))
         assertThat(
             response, hasItems(
-                hasProperty("name", `is`("Moon")),
-                hasProperty("name", `is`("Titan"))
+                allOf(
+                    hasProperty("name", `is`("Moon")),
+                    hasProperty(
+                        "firstSpacecraftLandingDate",
+                        `is`(LocalDate.of(1959, Month.SEPTEMBER, 13))
+                    )
+                ),
+                allOf(
+                    hasProperty("name", `is`("Titan")),
+                    hasProperty("firstSpacecraftLandingDate", nullValue())
+                )
             )
         )
     }
@@ -48,6 +60,7 @@ class QueryTests {
               getSatellite(id: $moonId) {
                 id
                 name
+                firstSpacecraftLandingDate
               }
             }
         """.trimIndent()
@@ -60,7 +73,11 @@ class QueryTests {
         assertThat(
             response, allOf(
                 hasProperty("id", `is`(1L)),
-                hasProperty("name", `is`("Moon"))
+                hasProperty("name", `is`("Moon")),
+                hasProperty(
+                    "firstSpacecraftLandingDate",
+                    `is`(LocalDate.of(1959, Month.SEPTEMBER, 13))
+                )
             )
         )
     }
@@ -73,6 +90,7 @@ class QueryTests {
               getSatelliteByName(name: "$titanName") {
                 id
                 name
+                firstSpacecraftLandingDate
               }
             }
         """.trimIndent()
@@ -85,7 +103,8 @@ class QueryTests {
         assertThat(
             response, allOf(
                 hasProperty("id", `is`(8L)),
-                hasProperty("name", `is`("Titan"))
+                hasProperty("name", `is`("Titan")),
+                hasProperty("firstSpacecraftLandingDate", nullValue())
             )
         )
     }
@@ -99,6 +118,7 @@ class QueryTests {
                 id
                 name
                 lifeExists
+                firstSpacecraftLandingDate
               }
             }
         """.trimIndent()

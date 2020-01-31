@@ -6,6 +6,7 @@ val kotlinVersion: String by project
 val micronautVersion: String by project
 val micronautDataVersion: String by project
 val apolloFederationJavaVersion: String by project
+val graphqlJavaExtendedScalarsVersion: String by project
 val okhttpVersion: String by project
 val logbackVersion: String by project
 val junitVersion: String by project
@@ -40,6 +41,7 @@ dependencies {
     }
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa:$micronautDataVersion")
     implementation("com.apollographql.federation:federation-graphql-java-support:$apolloFederationJavaVersion")
+    implementation("com.graphql-java:graphql-java-extended-scalars:$graphqlJavaExtendedScalarsVersion")
     implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     runtimeOnly("io.micronaut.configuration:micronaut-jdbc-hikari")

@@ -13,6 +13,8 @@ class SatelliteConverter : GenericConverter<Satellite, SatelliteDto> {
     override fun toDto(entity: Satellite): SatelliteDto = SatelliteDto(
         id = entity.id,
         name = entity.name,
-        lifeExists = Satellite.LifeExists.NO_DATA
+        // resolve to default value, then use custom field resolver if field was requested
+        lifeExists = Satellite.LifeExists.NO_DATA,
+        firstSpacecraftLandingDate = entity.firstSpacecraftLandingDate
     )
 }
