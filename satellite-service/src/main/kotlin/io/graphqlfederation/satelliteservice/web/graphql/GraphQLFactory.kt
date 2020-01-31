@@ -24,6 +24,7 @@ import javax.inject.Singleton
 class GraphQLFactory(
     private val getSatellitesFetcher: GetSatellitesFetcher,
     private val getSatelliteFetcher: GetSatelliteFetcher,
+    private val getSatelliteByNameFetcher: GetSatelliteByNameFetcher,
     private val lifeExistsFetcher: LifeExistsFetcher,
     private val satelliteService: SatelliteService,
     private val satelliteConverter: SatelliteConverter,
@@ -80,6 +81,7 @@ class GraphQLFactory(
             builder
                 .dataFetcher("getSatellites", getSatellitesFetcher)
                 .dataFetcher("getSatellite", getSatelliteFetcher)
+                .dataFetcher("getSatelliteByName", getSatelliteByNameFetcher)
         }
         .type("Satellite") { builder ->
             builder

@@ -6,6 +6,7 @@ import io.micronaut.test.annotation.MicronautTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import javax.inject.Inject
 
 @MicronautTest
@@ -61,6 +62,57 @@ class QueryTests {
                 hasProperty("id", `is`(1L)),
                 hasProperty("name", `is`("Moon"))
             )
+        )
+    }
+
+    @Test
+    fun testGetSatelliteByName() {
+        val titanName = "Titan"
+        val query = """
+            {
+              getSatelliteByName(name: "$titanName") {
+                id
+                name
+              }
+            }
+        """.trimIndent()
+
+        val response = graphQLClient.sendRequest(
+            query,
+            object : TypeReference<TestSatelliteDto>() {}
+        )
+
+        assertThat(
+            response, allOf(
+                hasProperty("id", `is`(8L)),
+                hasProperty("name", `is`("Titan"))
+            )
+        )
+    }
+
+    @Test
+    fun testGetSatelliteByNameShouldThrowException() {
+        val titanName = "Titan"
+        val query = """
+            {
+              getSatelliteByName(name: "$titanName") {
+                id
+                name
+                lifeExists
+              }
+            }
+        """.trimIndent()
+
+        val exception = assertThrows<RuntimeException> {
+            graphQLClient.sendRequest(
+                query,
+                object : TypeReference<TestSatelliteDto>() {}
+            )
+        }
+
+        assertThat(
+            exception.message,
+            `is`("Exception during execution of GraphQL query/mutation: [There was an error: Can't get `lifeExists` property\n, Cannot return null for non-nullable type: 'LifeExists' within parent 'Satellite' (/getSatelliteByName/lifeExists)\n]")
         )
     }
 }

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import io.graphqlfederation.authservice.service.GraphQLClient
 import io.graphqlfederation.authservice.web.dto.SignInResponseDto
 import io.micronaut.test.annotation.MicronautTest
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -68,6 +70,11 @@ class AuthTests {
                 object : TypeReference<SignInResponseDto>() {}
             )
         }
+
+        assertThat(
+            exception.message,
+            `is`("Exception during execution of GraphQL query/mutation: [Exception while fetching data (/signIn) : Can't authenticate user: john_doe\n]")
+        )
     }
 
     @Test

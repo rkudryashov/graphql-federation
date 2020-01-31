@@ -23,8 +23,19 @@ class GetSatelliteFetcher(
     private val satelliteConverter: SatelliteConverter
 ) : DataFetcher<SatelliteDto> {
     override fun get(env: DataFetchingEnvironment): SatelliteDto {
-        val id: Long = env.getArgument<String>("id").toLong()
+        val id = env.getArgument<String>("id").toLong()
         return satelliteConverter.toDto(satelliteService.getById(id))
+    }
+}
+
+@Singleton
+class GetSatelliteByNameFetcher(
+    private val satelliteService: SatelliteService,
+    private val satelliteConverter: SatelliteConverter
+) : DataFetcher<SatelliteDto> {
+    override fun get(env: DataFetchingEnvironment): SatelliteDto {
+        val name = env.getArgument<String>("name")
+        return satelliteConverter.toDto(satelliteService.getByName(name))
     }
 }
 
@@ -33,7 +44,7 @@ class LifeExistsFetcher(
     private val satelliteService: SatelliteService
 ) : DataFetcher<Satellite.LifeExists> {
     override fun get(env: DataFetchingEnvironment): Satellite.LifeExists {
-        val id: Long = env.getSource<SatelliteDto>().id
+        val id = env.getSource<SatelliteDto>().id
         return satelliteService.getLifeExists(id)
     }
 }
