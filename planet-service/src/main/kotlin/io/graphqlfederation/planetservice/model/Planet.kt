@@ -17,7 +17,7 @@ class Planet(
     val type: Type,
 
     @Column
-    val characteristicsId: Long
+    val paramsId: Long
 ) {
     enum class Type {
         TERRESTRIAL_PLANET,

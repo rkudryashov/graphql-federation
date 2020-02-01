@@ -5,7 +5,7 @@ import javax.persistence.*
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(length = 32)
-sealed class Characteristics(
+sealed class Params(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,17 +19,17 @@ sealed class Characteristics(
 )
 
 @Entity
-class InhabitedPlanetCharacteristics(
+class InhabitedPlanetParams(
     id: Long = 0,
     meanRadius: Double,
     earthsMass: Double,
     @Column
     val population: Double
-) : Characteristics(id, meanRadius, earthsMass)
+) : Params(id, meanRadius, earthsMass)
 
 @Entity
-class UninhabitedPlanetCharacteristics(
+class UninhabitedPlanetParams(
     id: Long = 0,
     meanRadius: Double,
     earthsMass: Double
-) : Characteristics(id, meanRadius, earthsMass)
+) : Params(id, meanRadius, earthsMass)

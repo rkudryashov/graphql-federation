@@ -9,12 +9,12 @@ import graphql.execution.instrumentation.ChainedInstrumentation
 import graphql.schema.TypeResolver
 import graphql.schema.idl.NaturalEnumValuesProvider
 import graphql.schema.idl.RuntimeWiring
-import io.graphqlfederation.planetservice.misc.CharacteristicsConverter
+import io.graphqlfederation.planetservice.misc.ParamsConverter
 import io.graphqlfederation.planetservice.model.Planet
-import io.graphqlfederation.planetservice.service.CharacteristicsService
-import io.graphqlfederation.planetservice.web.dto.CharacteristicsDto
-import io.graphqlfederation.planetservice.web.dto.InhabitedPlanetCharacteristicsDto
-import io.graphqlfederation.planetservice.web.dto.UninhabitedPlanetCharacteristicsDto
+import io.graphqlfederation.planetservice.service.ParamsService
+import io.graphqlfederation.planetservice.web.dto.InhabitedPlanetParamsDto
+import io.graphqlfederation.planetservice.web.dto.ParamsDto
+import io.graphqlfederation.planetservice.web.dto.UninhabitedPlanetParamsDto
 import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.Factory
 import io.micronaut.core.io.ResourceResolver
@@ -31,9 +31,9 @@ class GraphQLFactory(
     private val getPlanetFetcher: GetPlanetFetcher,
     private val getPlanetByNameFetcher: GetPlanetByNameFetcher,
     private val createPlanetFetcher: CreatePlanetFetcher,
-    private val characteristicsFetcher: CharacteristicsFetcher,
-    private val characteristicsService: CharacteristicsService,
-    private val characteristicsConverter: CharacteristicsConverter
+    private val paramsFetcher: ParamsFetcher,
+    private val paramsService: ParamsService,
+    private val paramsConverter: ParamsConverter
 ) {
 
     @Bean
@@ -64,11 +64,11 @@ class GraphQLFactory(
     }
 
     private fun createRuntimeWiring(): RuntimeWiring {
-        val characteristicsTypeResolver = TypeResolver { env ->
-            when (val characteristics = env.getObject() as CharacteristicsDto) {
-                is InhabitedPlanetCharacteristicsDto -> env.schema.getObjectType("InhabitedPlanetCharacteristics")
-                is UninhabitedPlanetCharacteristicsDto -> env.schema.getObjectType("UninhabitedPlanetCharacteristics")
-                else -> throw RuntimeException("Unexpected characteristics type: ${characteristics.javaClass.name}")
+        val paramsTypeResolver = TypeResolver { env ->
+            when (val params = env.getObject() as ParamsDto) {
+                is InhabitedPlanetParamsDto -> env.schema.getObjectType("InhabitedPlanetParams")
+                is UninhabitedPlanetParamsDto -> env.schema.getObjectType("UninhabitedPlanetParams")
+                else -> throw RuntimeException("Unexpected params type: ${params.javaClass.name}")
             }
         }
 
@@ -83,10 +83,10 @@ class GraphQLFactory(
                 builder.dataFetcher("createPlanet", createPlanetFetcher)
             }
             .type("Planet") { builder ->
-                builder.dataFetcher("characteristics", characteristicsFetcher)
+                builder.dataFetcher("params", paramsFetcher)
             }
-            .type("Characteristics") { builder ->
-                builder.typeResolver(characteristicsTypeResolver)
+            .type("Params") { builder ->
+                builder.typeResolver(paramsTypeResolver)
             }
             .type("Type") { builder ->
                 builder.enumValues(NaturalEnumValuesProvider(Planet.Type::class.java))
@@ -96,21 +96,20 @@ class GraphQLFactory(
 
     @Bean
     @Singleton
-    fun characteristicsBatchLoader(): BatchLoader<Long, CharacteristicsDto> = BatchLoader { keys ->
+    fun paramsBatchLoader(): BatchLoader<Long, ParamsDto> = BatchLoader { keys ->
         CompletableFuture.supplyAsync {
-            characteristicsService.getByIds(keys)
-                .map { characteristicsConverter.toDto(it) }
+            paramsService.getByIds(keys)
+                .map { paramsConverter.toDto(it) }
         }
     }
 
     // bean's default scope is `prototype`
     @Bean
-    fun characteristicsDataLoader(): DataLoader<Long, CharacteristicsDto> =
-        DataLoader.newDataLoader(characteristicsBatchLoader())
+    fun paramsDataLoader(): DataLoader<Long, ParamsDto> = DataLoader.newDataLoader(paramsBatchLoader())
 
     // bean's default scope is `prototype`
     @Bean
     fun dataLoaderRegistry(): DataLoaderRegistry = DataLoaderRegistry().apply {
-        register("characteristics", characteristicsDataLoader())
+        register("params", paramsDataLoader())
     }
 }

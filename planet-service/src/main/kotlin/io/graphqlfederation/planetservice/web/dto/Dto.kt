@@ -6,29 +6,29 @@ class PlanetDto(
     val id: Long,
     val name: String,
     val type: Planet.Type,
-    val characteristics: CharacteristicsDto
+    val params: ParamsDto
 )
 
-open class CharacteristicsDto(
+open class ParamsDto(
     val id: Long,
     val meanRadius: Double = 0.0,
     val earthsMass: Double = 0.0
 )
 
-class InhabitedPlanetCharacteristicsDto(
+class InhabitedPlanetParamsDto(
     id: Long,
     meanRadius: Double,
     earthsMass: Double,
     val population: Double
-) : CharacteristicsDto(id, meanRadius, earthsMass)
+) : ParamsDto(id, meanRadius, earthsMass)
 
-class UninhabitedPlanetCharacteristicsDto(
+class UninhabitedPlanetParamsDto(
     id: Long,
     meanRadius: Double,
     earthsMass: Double
-) : CharacteristicsDto(id, meanRadius, earthsMass)
+) : ParamsDto(id, meanRadius, earthsMass)
 
-class CharacteristicsInputDto(
+class ParamsInputDto(
     val meanRadius: Double,
     val earthsMass: Double,
     val population: Double

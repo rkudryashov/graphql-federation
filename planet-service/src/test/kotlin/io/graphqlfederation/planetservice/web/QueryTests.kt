@@ -24,10 +24,10 @@ class QueryTests {
                 id
                 name
                 type
-                characteristics {
+                params {
                   meanRadius
                   earthsMass
-                  ... on InhabitedPlanetCharacteristics {
+                  ... on InhabitedPlanetParams {
                     population
                   }
                 }
@@ -64,10 +64,10 @@ class QueryTests {
                 id
                 name
                 type
-                characteristics {
+                params {
                   meanRadius
                   earthsMass
-                  ... on InhabitedPlanetCharacteristics {
+                  ... on InhabitedPlanetParams {
                     population
                   }
                 }
@@ -86,7 +86,7 @@ class QueryTests {
                 hasProperty("name", `is`("Earth")),
                 hasProperty("type", `is`(Planet.Type.TERRESTRIAL_PLANET)),
                 hasProperty(
-                    "characteristics", allOf(
+                    "params", allOf(
                         hasProperty("meanRadius", `is`(6371.0)),
                         hasProperty("earthsMass", `is`(1.0))
                     )
@@ -104,10 +104,10 @@ class QueryTests {
                 id
                 name
                 type
-                characteristics {
+                params {
                   meanRadius
                   earthsMass
-                  ... on InhabitedPlanetCharacteristics {
+                  ... on InhabitedPlanetParams {
                     population
                   }
                 }
@@ -126,7 +126,7 @@ class QueryTests {
                 hasProperty("name", `is`("Earth")),
                 hasProperty("type", `is`(Planet.Type.TERRESTRIAL_PLANET)),
                 hasProperty(
-                    "characteristics", allOf(
+                    "params", allOf(
                         hasProperty("meanRadius", `is`(6371.0)),
                         hasProperty("earthsMass", `is`(1.0))
                     )

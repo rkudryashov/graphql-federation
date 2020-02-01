@@ -1,10 +1,10 @@
 package io.graphqlfederation.planetservice.web
 
 import com.fasterxml.jackson.core.type.TypeReference
-import io.graphqlfederation.planetservice.model.InhabitedPlanetCharacteristics
+import io.graphqlfederation.planetservice.model.InhabitedPlanetParams
 import io.graphqlfederation.planetservice.model.Planet
-import io.graphqlfederation.planetservice.model.UninhabitedPlanetCharacteristics
-import io.graphqlfederation.planetservice.repository.CharacteristicsRepository
+import io.graphqlfederation.planetservice.model.UninhabitedPlanetParams
+import io.graphqlfederation.planetservice.repository.ParamsRepository
 import io.graphqlfederation.planetservice.repository.PlanetRepository
 import io.graphqlfederation.planetservice.service.GraphQLClient
 import io.graphqlfederation.planetservice.web.dto.PlanetDto
@@ -26,7 +26,7 @@ class MutationTests {
     @Inject
     private lateinit var planetRepository: PlanetRepository
     @Inject
-    private lateinit var characteristicsRepository: CharacteristicsRepository
+    private lateinit var paramsRepository: ParamsRepository
 
     @Test
     fun testCreateInhabitedPlanet() {
@@ -40,14 +40,14 @@ class MutationTests {
 
         val mutation = """
               mutation {
-                createPlanet (name: "$name", type: $type, characteristics: { meanRadius: $meanRadius, earthsMass: $earthsMass, population: $population}) {
+                createPlanet (name: "$name", type: $type, params: { meanRadius: $meanRadius, earthsMass: $earthsMass, population: $population}) {
                     id
                     name
                     type
-                    characteristics {
+                    params {
                         meanRadius
                         earthsMass
-                        ... on InhabitedPlanetCharacteristics {
+                        ... on InhabitedPlanetParams {
                             population
                         }
                     }
@@ -70,7 +70,7 @@ class MutationTests {
                 hasProperty("name", `is`(name)),
                 hasProperty("type", `is`(type)),
                 hasProperty(
-                    "characteristics", allOf(
+                    "params", allOf(
                         hasProperty("meanRadius", `is`(meanRadius)),
                         hasProperty("earthsMass", `is`(earthsMass))
                     )
@@ -80,9 +80,9 @@ class MutationTests {
 
         val createdPlanet =
             planetRepository.findById(createdPlanetId).orElseThrow { RuntimeException("Unexpected database state") }
-        val createdPlanetCharacteristics = characteristicsRepository.findById(createdPlanet.characteristicsId)
-        assertTrue(createdPlanetCharacteristics.isPresent)
-        assertEquals(InhabitedPlanetCharacteristics::class.java, createdPlanetCharacteristics.get()::class.java)
+        val createdPlanetParams = paramsRepository.findById(createdPlanet.paramsId)
+        assertTrue(createdPlanetParams.isPresent)
+        assertEquals(InhabitedPlanetParams::class.java, createdPlanetParams.get()::class.java)
     }
 
     @Test
@@ -96,11 +96,11 @@ class MutationTests {
 
         val mutation = """
               mutation {
-                createPlanet (name: "$name", type: $type, characteristics: { meanRadius: $meanRadius, earthsMass: $earthsMass }) {
+                createPlanet (name: "$name", type: $type, params: { meanRadius: $meanRadius, earthsMass: $earthsMass }) {
                     id
                     name
                     type
-                    characteristics {
+                    params {
                         meanRadius
                         earthsMass
                     }
@@ -123,7 +123,7 @@ class MutationTests {
                 hasProperty("name", `is`(name)),
                 hasProperty("type", `is`(type)),
                 hasProperty(
-                    "characteristics", allOf(
+                    "params", allOf(
                         hasProperty("meanRadius", `is`(meanRadius)),
                         hasProperty("earthsMass", `is`(earthsMass))
                     )
@@ -133,9 +133,9 @@ class MutationTests {
 
         val createdPlanet =
             planetRepository.findById(createdPlanetId).orElseThrow { RuntimeException("Unexpected database state") }
-        val createdPlanetCharacteristics = characteristicsRepository.findById(createdPlanet.characteristicsId)
-        assertTrue(createdPlanetCharacteristics.isPresent)
-        assertEquals(UninhabitedPlanetCharacteristics::class.java, createdPlanetCharacteristics.get()::class.java)
+        val createdPlanetParams = paramsRepository.findById(createdPlanet.paramsId)
+        assertTrue(createdPlanetParams.isPresent)
+        assertEquals(UninhabitedPlanetParams::class.java, createdPlanetParams.get()::class.java)
     }
 
     @Test
@@ -147,14 +147,14 @@ class MutationTests {
 
         val mutation = """
               mutation {
-                createPlanet (name: "$name", type: $type, characteristics: { meanRadius: $meanRadius, earthsMass: $earthsMass }) {
+                createPlanet (name: "$name", type: $type, params: { meanRadius: $meanRadius, earthsMass: $earthsMass }) {
                     id
                     name
                     type
-                    characteristics {
+                    params {
                         meanRadius
                         earthsMass
-                        ... on InhabitedPlanetCharacteristics {
+                        ... on InhabitedPlanetParams {
                             population
                         }
                     }

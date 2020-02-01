@@ -7,7 +7,7 @@ import javax.inject.Singleton
 @Singleton
 class PlanetService(
     private val repository: PlanetRepository,
-    private val characteristicsService: CharacteristicsService
+    private val paramsService: ParamsService
 ) {
 
     fun getAll(): Iterable<Planet> = repository.findAll()
@@ -26,9 +26,9 @@ class PlanetService(
         earthsMass: Double,
         population: Double = 0.0
     ): Planet {
-        val characteristics = characteristicsService.create(meanRadius, earthsMass, population)
+        val params = paramsService.create(meanRadius, earthsMass, population)
 
-        return Planet(name = name, type = type, characteristicsId = characteristics.id).also {
+        return Planet(name = name, type = type, paramsId = params.id).also {
             repository.save(it)
         }
     }

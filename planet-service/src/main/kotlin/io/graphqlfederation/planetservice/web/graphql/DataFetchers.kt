@@ -6,8 +6,8 @@ import graphql.schema.DataFetchingEnvironment
 import io.graphqlfederation.planetservice.misc.PlanetConverter
 import io.graphqlfederation.planetservice.model.Planet
 import io.graphqlfederation.planetservice.service.PlanetService
-import io.graphqlfederation.planetservice.web.dto.CharacteristicsDto
-import io.graphqlfederation.planetservice.web.dto.CharacteristicsInputDto
+import io.graphqlfederation.planetservice.web.dto.ParamsDto
+import io.graphqlfederation.planetservice.web.dto.ParamsInputDto
 import io.graphqlfederation.planetservice.web.dto.PlanetDto
 import org.dataloader.DataLoader
 import org.slf4j.LoggerFactory
@@ -46,17 +46,17 @@ class GetPlanetByNameFetcher(
 }
 
 @Singleton
-class CharacteristicsFetcher : DataFetcher<CompletableFuture<CharacteristicsDto>> {
+class ParamsFetcher : DataFetcher<CompletableFuture<ParamsDto>> {
 
     private val log = LoggerFactory.getLogger(this.javaClass)
 
-    override fun get(env: DataFetchingEnvironment): CompletableFuture<CharacteristicsDto> {
+    override fun get(env: DataFetchingEnvironment): CompletableFuture<ParamsDto> {
         val planetDto = env.getSource<PlanetDto>()
-        log.info("Resolve `characteristics` field for planet: ${planetDto.name}")
+        log.info("Resolve `params` field for planet: ${planetDto.name}")
 
-        val dataLoader: DataLoader<Long, CharacteristicsDto> = env.getDataLoader("characteristics")
+        val dataLoader: DataLoader<Long, ParamsDto> = env.getDataLoader("params")
 
-        return dataLoader.load(planetDto.characteristics.id)
+        return dataLoader.load(planetDto.params.id)
     }
 }
 
@@ -74,16 +74,16 @@ class CreatePlanetFetcher(
 
         val name = env.getArgument<String>("name")
         val type = env.getArgument<Planet.Type>("type")
-        val characteristicsInputDto = objectMapper.convertValue(
-            env.getArgument("characteristics"), CharacteristicsInputDto::class.java
+        val paramsInputDto = objectMapper.convertValue(
+            env.getArgument("params"), ParamsInputDto::class.java
         )
 
         val newPlanet = planetService.create(
             name,
             type,
-            characteristicsInputDto.meanRadius,
-            characteristicsInputDto.earthsMass,
-            characteristicsInputDto.population
+            paramsInputDto.meanRadius,
+            paramsInputDto.earthsMass,
+            paramsInputDto.population
         )
 
         return planetConverter.toDto(newPlanet)

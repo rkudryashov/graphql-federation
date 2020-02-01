@@ -1,13 +1,13 @@
 package io.graphqlfederation.planetservice.misc
 
-import io.graphqlfederation.planetservice.model.Characteristics
-import io.graphqlfederation.planetservice.model.InhabitedPlanetCharacteristics
+import io.graphqlfederation.planetservice.model.Params
+import io.graphqlfederation.planetservice.model.InhabitedPlanetParams
 import io.graphqlfederation.planetservice.model.Planet
-import io.graphqlfederation.planetservice.model.UninhabitedPlanetCharacteristics
-import io.graphqlfederation.planetservice.web.dto.CharacteristicsDto
-import io.graphqlfederation.planetservice.web.dto.InhabitedPlanetCharacteristicsDto
+import io.graphqlfederation.planetservice.model.UninhabitedPlanetParams
+import io.graphqlfederation.planetservice.web.dto.ParamsDto
+import io.graphqlfederation.planetservice.web.dto.InhabitedPlanetParamsDto
 import io.graphqlfederation.planetservice.web.dto.PlanetDto
-import io.graphqlfederation.planetservice.web.dto.UninhabitedPlanetCharacteristicsDto
+import io.graphqlfederation.planetservice.web.dto.UninhabitedPlanetParamsDto
 import javax.inject.Singleton
 
 interface GenericConverter<E, D> {
@@ -17,28 +17,28 @@ interface GenericConverter<E, D> {
 @Singleton
 class PlanetConverter : GenericConverter<Planet, PlanetDto> {
     override fun toDto(entity: Planet): PlanetDto {
-        val characteristics = CharacteristicsDto(id = entity.characteristicsId)
+        val params = ParamsDto(id = entity.paramsId)
 
         return PlanetDto(
             id = entity.id,
             name = entity.name,
             type = entity.type,
-            characteristics = characteristics
+            params = params
         )
 
     }
 }
 
 @Singleton
-class CharacteristicsConverter : GenericConverter<Characteristics, CharacteristicsDto> {
-    override fun toDto(entity: Characteristics): CharacteristicsDto = when (entity) {
-        is InhabitedPlanetCharacteristics -> InhabitedPlanetCharacteristicsDto(
+class ParamsConverter : GenericConverter<Params, ParamsDto> {
+    override fun toDto(entity: Params): ParamsDto = when (entity) {
+        is InhabitedPlanetParams -> InhabitedPlanetParamsDto(
             id = entity.id,
             meanRadius = entity.meanRadius,
             earthsMass = entity.earthsMass,
             population = entity.population
         )
-        is UninhabitedPlanetCharacteristics -> UninhabitedPlanetCharacteristicsDto(
+        is UninhabitedPlanetParams -> UninhabitedPlanetParamsDto(
             id = entity.id,
             meanRadius = entity.meanRadius,
             earthsMass = entity.earthsMass
