@@ -4,8 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 // todo remove unneeded
 val kotlinVersion: String by project
 val micronautVersion: String by project
-val micronautDataVersion: String by project
-val apolloFederationJavaVersion: String by project
+val graphqlJavaFederationVersion: String by project
 val graphqlJavaExtendedScalarsVersion: String by project
 val okhttpVersion: String by project
 val logbackVersion: String by project
@@ -31,16 +30,14 @@ dependencies {
 
     kapt("io.micronaut:micronaut-inject-java")
     kapt("io.micronaut:micronaut-validation")
-    kapt("io.micronaut.data:micronaut-data-processor:$micronautDataVersion")
+    kapt("io.micronaut.data:micronaut-data-processor")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     implementation("io.micronaut:micronaut-http-server-netty")
     implementation("io.micronaut:micronaut-security-jwt")
-    implementation("io.micronaut.graphql:micronaut-graphql") {
-        exclude(group = "com.graphql-java", module = "graphql-java")
-    }
-    implementation("io.micronaut.data:micronaut-data-hibernate-jpa:$micronautDataVersion")
-    implementation("com.apollographql.federation:federation-graphql-java-support:$apolloFederationJavaVersion")
+    implementation("io.micronaut.graphql:micronaut-graphql")
+    implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
+    implementation("io.gqljf:graphql-java-federation:$graphqlJavaFederationVersion")
     implementation("com.graphql-java:graphql-java-extended-scalars:$graphqlJavaExtendedScalarsVersion")
     implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

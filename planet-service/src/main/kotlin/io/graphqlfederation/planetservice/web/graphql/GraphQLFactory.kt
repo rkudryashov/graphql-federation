@@ -1,7 +1,5 @@
 package io.graphqlfederation.planetservice.web.graphql
 
-import com.apollographql.federation.graphqljava.Federation
-import com.apollographql.federation.graphqljava.tracing.FederatedTracingInstrumentation
 import graphql.GraphQL
 import graphql.analysis.MaxQueryComplexityInstrumentation
 import graphql.analysis.MaxQueryDepthInstrumentation
@@ -9,6 +7,8 @@ import graphql.execution.instrumentation.ChainedInstrumentation
 import graphql.schema.TypeResolver
 import graphql.schema.idl.NaturalEnumValuesProvider
 import graphql.schema.idl.RuntimeWiring
+import io.gqljf.federation.FederatedSchemaBuilder
+import io.gqljf.federation.tracing.FederatedTracingInstrumentation
 import io.graphqlfederation.planetservice.misc.ParamsConverter
 import io.graphqlfederation.planetservice.model.Planet
 import io.graphqlfederation.planetservice.service.ParamsService
@@ -21,7 +21,6 @@ import io.micronaut.core.io.ResourceResolver
 import org.dataloader.BatchLoader
 import org.dataloader.DataLoader
 import org.dataloader.DataLoaderRegistry
-import java.io.InputStreamReader
 import java.util.concurrent.CompletableFuture
 import javax.inject.Singleton
 
@@ -39,15 +38,10 @@ class GraphQLFactory(
     @Bean
     @Singleton
     fun graphQL(resourceResolver: ResourceResolver): GraphQL {
-        val schemaResource = resourceResolver.getResourceAsStream("classpath:schema.graphqls").get()
-
-        val planetTypeResolver = TypeResolver { env ->
-            env.schema.getObjectType("Planet")
-        }
-
-        val transformedGraphQLSchema = Federation.transform(InputStreamReader(schemaResource), createRuntimeWiring())
-            .fetchEntities {}
-            .resolveEntityType(planetTypeResolver)
+        val schemaInputStream = resourceResolver.getResourceAsStream("classpath:schema.graphqls").get()
+        val transformedGraphQLSchema = FederatedSchemaBuilder()
+            .schemaInputStream(schemaInputStream)
+            .runtimeWiring(createRuntimeWiring())
             .build()
 
         return GraphQL.newGraphQL(transformedGraphQLSchema)

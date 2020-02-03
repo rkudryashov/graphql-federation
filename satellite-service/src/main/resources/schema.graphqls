@@ -13,7 +13,7 @@ type Satellite {
 
 type Planet @key(fields: "id") @extends {
     id: ID! @external
-    satellites: [Satellite!]
+    satellites: [Satellite!]!
 }
 
 enum LifeExists {

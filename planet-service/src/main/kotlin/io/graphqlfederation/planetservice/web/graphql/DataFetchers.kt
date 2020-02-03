@@ -74,9 +74,7 @@ class CreatePlanetFetcher(
 
         val name = env.getArgument<String>("name")
         val type = env.getArgument<Planet.Type>("type")
-        val paramsInputDto = objectMapper.convertValue(
-            env.getArgument("params"), ParamsInputDto::class.java
-        )
+        val paramsInputDto = objectMapper.convertValue(env.getArgument("params"), ParamsInputDto::class.java)
 
         val newPlanet = planetService.create(
             name,

@@ -1,15 +1,13 @@
 package io.graphqlfederation.satelliteservice.web.graphql
 
-import com.apollographql.federation.graphqljava.Federation
-import com.apollographql.federation.graphqljava._Entity
-import com.apollographql.federation.graphqljava.tracing.FederatedTracingInstrumentation
 import graphql.GraphQL
 import graphql.execution.AsyncExecutionStrategy
 import graphql.execution.AsyncSerialExecutionStrategy
 import graphql.scalars.ExtendedScalars
-import graphql.schema.DataFetcher
-import graphql.schema.TypeResolver
 import graphql.schema.idl.RuntimeWiring
+import io.gqljf.federation.FederatedEntityResolver
+import io.gqljf.federation.FederatedSchemaBuilder
+import io.gqljf.federation.tracing.FederatedTracingInstrumentation
 import io.graphqlfederation.satelliteservice.misc.SatelliteConverter
 import io.graphqlfederation.satelliteservice.service.SatelliteService
 import io.graphqlfederation.satelliteservice.web.dto.PlanetDto
@@ -17,7 +15,6 @@ import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.Factory
 import io.micronaut.core.io.ResourceResolver
 import org.slf4j.LoggerFactory
-import java.io.InputStreamReader
 import javax.inject.Singleton
 
 @Factory
@@ -37,30 +34,22 @@ class GraphQLFactory(
     @Bean
     @Singleton
     fun graphQL(resourceResolver: ResourceResolver): GraphQL {
-        val schemaResource = resourceResolver.getResourceAsStream("classpath:schema.graphqls").get()
+        val schemaInputStream = resourceResolver.getResourceAsStream("classpath:schema.graphqls").get()
 
-        val entitiesDataFetcher = DataFetcher { env ->
-            val representations = env.getArgument<List<Map<String, Any>>>(_Entity.argumentName)
-
-            representations.map { values ->
-                if ("Planet" == values["__typename"]) {
-                    val id = (values["id"] as String).toLong()
-                    val satellites = satelliteService.getByPlanetId(id)
-                    PlanetDto(
-                        id = id,
-                        satellites = satellites.map { satelliteConverter.toDto(it) }
-                    )
-                }
+        val entityResolvers = listOf(
+            FederatedEntityResolver<Long, PlanetDto>("Planet", PlanetDto::class.java) { id ->
+                val satellites = satelliteService.getByPlanetId(id)
+                PlanetDto(
+                    id = id,
+                    satellites = satellites.map { satelliteConverter.toDto(it) }
+                )
             }
-        }
+        )
 
-        val planetTypeResolver = TypeResolver { env ->
-            env.schema.getObjectType("Planet")
-        }
-
-        val transformedGraphQLSchema = Federation.transform(InputStreamReader(schemaResource), createRuntimeWiring())
-            .fetchEntities(entitiesDataFetcher)
-            .resolveEntityType(planetTypeResolver)
+        val transformedGraphQLSchema = FederatedSchemaBuilder()
+            .schemaInputStream(schemaInputStream)
+            .runtimeWiring(createRuntimeWiring())
+            .federatedEntitiesResolvers(entityResolvers)
             .build()
 
         return GraphQL.newGraphQL(transformedGraphQLSchema)

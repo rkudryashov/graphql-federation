@@ -1,12 +1,11 @@
 package io.graphqlfederation.authservice.web.graphql
 
-import com.apollographql.federation.graphqljava.Federation
 import graphql.GraphQL
 import graphql.schema.idl.RuntimeWiring
+import io.gqljf.federation.FederatedSchemaBuilder
 import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.Factory
 import io.micronaut.core.io.ResourceResolver
-import java.io.InputStreamReader
 import javax.inject.Singleton
 
 @Factory
@@ -18,9 +17,10 @@ class GraphQLFactory(
     @Bean
     @Singleton
     fun graphQL(resourceResolver: ResourceResolver): GraphQL {
-        val schemaResource = resourceResolver.getResourceAsStream("classpath:schema.graphqls").get()
-
-        val transformedGraphQLSchema = Federation.transform(InputStreamReader(schemaResource), createRuntimeWiring())
+        val schemaInputStream = resourceResolver.getResourceAsStream("classpath:schema.graphqls").get()
+        val transformedGraphQLSchema = FederatedSchemaBuilder()
+            .schemaInputStream(schemaInputStream)
+            .runtimeWiring(createRuntimeWiring())
             .build()
 
         return GraphQL.newGraphQL(transformedGraphQLSchema).build()
