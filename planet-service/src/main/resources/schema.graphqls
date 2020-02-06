@@ -8,6 +8,10 @@ type Mutation {
     createPlanet(name: String!, type: Type!, params: ParamsInput!): Planet!
 }
 
+type Subscription {
+    latestPlanet: Planet!
+}
+
 type Planet @key(fields: "id") {
     id: ID!
     name: String!

@@ -30,6 +30,7 @@ class GraphQLFactory(
     private val getPlanetFetcher: GetPlanetFetcher,
     private val getPlanetByNameFetcher: GetPlanetByNameFetcher,
     private val createPlanetFetcher: CreatePlanetFetcher,
+    private val latestPlanetFetcher: LatestPlanetFetcher,
     private val paramsFetcher: ParamsFetcher,
     private val paramsService: ParamsService,
     private val paramsConverter: ParamsConverter
@@ -76,6 +77,9 @@ class GraphQLFactory(
             .type("Mutation") { builder ->
                 builder.dataFetcher("createPlanet", createPlanetFetcher)
             }
+            .type("Subscription") { builder ->
+                builder.dataFetcher("latestPlanet", latestPlanetFetcher)
+            }
             .type("Planet") { builder ->
                 builder.dataFetcher("params", paramsFetcher)
             }
@@ -99,11 +103,8 @@ class GraphQLFactory(
 
     // bean's default scope is `prototype`
     @Bean
-    fun paramsDataLoader(): DataLoader<Long, ParamsDto> = DataLoader.newDataLoader(paramsBatchLoader())
-
-    // bean's default scope is `prototype`
-    @Bean
-    fun dataLoaderRegistry(): DataLoaderRegistry = DataLoaderRegistry().apply {
-        register("params", paramsDataLoader())
+    fun dataLoaderRegistry() = DataLoaderRegistry().apply {
+        val paramsDataLoader = DataLoader.newDataLoader(paramsBatchLoader())
+        register("params", paramsDataLoader)
     }
 }

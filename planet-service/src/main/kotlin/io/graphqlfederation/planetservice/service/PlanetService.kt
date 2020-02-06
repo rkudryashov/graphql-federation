@@ -2,6 +2,9 @@ package io.graphqlfederation.planetservice.service
 
 import io.graphqlfederation.planetservice.model.Planet
 import io.graphqlfederation.planetservice.repository.PlanetRepository
+import io.reactivex.BackpressureStrategy
+import io.reactivex.Flowable
+import io.reactivex.subjects.PublishSubject
 import javax.inject.Singleton
 
 @Singleton
@@ -9,6 +12,8 @@ class PlanetService(
     private val repository: PlanetRepository,
     private val paramsService: ParamsService
 ) {
+
+    private val publishSubject = PublishSubject.create<Planet>()
 
     fun getAll(): Iterable<Planet> = repository.findAll()
 
@@ -30,6 +35,9 @@ class PlanetService(
 
         return Planet(name = name, type = type, paramsId = params.id).also {
             repository.save(it)
+            publishSubject.onNext(it)
         }
     }
+
+    fun getLatestPlanet(): Flowable<Planet> = publishSubject.toFlowable(BackpressureStrategy.BUFFER)
 }

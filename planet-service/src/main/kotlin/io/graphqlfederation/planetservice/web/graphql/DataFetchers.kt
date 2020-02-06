@@ -10,6 +10,7 @@ import io.graphqlfederation.planetservice.web.dto.ParamsDto
 import io.graphqlfederation.planetservice.web.dto.ParamsInputDto
 import io.graphqlfederation.planetservice.web.dto.PlanetDto
 import org.dataloader.DataLoader
+import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
 import java.util.concurrent.CompletableFuture
 import javax.inject.Singleton
@@ -46,21 +47,6 @@ class GetPlanetByNameFetcher(
 }
 
 @Singleton
-class ParamsFetcher : DataFetcher<CompletableFuture<ParamsDto>> {
-
-    private val log = LoggerFactory.getLogger(this.javaClass)
-
-    override fun get(env: DataFetchingEnvironment): CompletableFuture<ParamsDto> {
-        val planetDto = env.getSource<PlanetDto>()
-        log.info("Resolve `params` field for planet: ${planetDto.name}")
-
-        val dataLoader: DataLoader<Long, ParamsDto> = env.getDataLoader("params")
-
-        return dataLoader.load(planetDto.params.id)
-    }
-}
-
-@Singleton
 class CreatePlanetFetcher(
     private val objectMapper: ObjectMapper,
     private val planetService: PlanetService,
@@ -85,5 +71,29 @@ class CreatePlanetFetcher(
         )
 
         return planetConverter.toDto(newPlanet)
+    }
+}
+
+@Singleton
+class LatestPlanetFetcher(
+    private val planetService: PlanetService,
+    private val planetConverter: PlanetConverter
+) : DataFetcher<Publisher<PlanetDto>> {
+
+    override fun get(environment: DataFetchingEnvironment) = planetService.getLatestPlanet().map { planetConverter.toDto(it) }
+}
+
+@Singleton
+class ParamsFetcher : DataFetcher<CompletableFuture<ParamsDto>> {
+
+    private val log = LoggerFactory.getLogger(this.javaClass)
+
+    override fun get(env: DataFetchingEnvironment): CompletableFuture<ParamsDto> {
+        val planetDto = env.getSource<PlanetDto>()
+        log.info("Resolve `params` field for planet: ${planetDto.name}")
+
+        val dataLoader: DataLoader<Long, ParamsDto> = env.getDataLoader("params")
+
+        return dataLoader.load(planetDto.params.id)
     }
 }

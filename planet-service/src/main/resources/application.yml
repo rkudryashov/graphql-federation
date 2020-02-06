@@ -23,3 +23,6 @@ jpa:
 
 graphql:
   graphiql.enabled: true
+  graphql-ws:
+    enabled: true
+

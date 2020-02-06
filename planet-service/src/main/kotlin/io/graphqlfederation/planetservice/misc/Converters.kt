@@ -25,7 +25,6 @@ class PlanetConverter : GenericConverter<Planet, PlanetDto> {
             type = entity.type,
             params = params
         )
-
     }
 }
 
