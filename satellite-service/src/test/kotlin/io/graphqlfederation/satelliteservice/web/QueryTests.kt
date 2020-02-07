@@ -29,10 +29,7 @@ class QueryTests {
             }
         """.trimIndent()
 
-        val response = graphQLClient.sendRequest(
-            query,
-            object : TypeReference<List<TestSatelliteDto>>() {}
-        )
+        val response = graphQLClient.sendRequest(query, object : TypeReference<List<TestSatelliteDto>>() {})
 
         assertThat(response, hasSize(14))
         assertThat(
@@ -65,10 +62,7 @@ class QueryTests {
             }
         """.trimIndent()
 
-        val response = graphQLClient.sendRequest(
-            query,
-            object : TypeReference<TestSatelliteDto>() {}
-        )
+        val response = graphQLClient.sendRequest(query, object : TypeReference<TestSatelliteDto>() {})
 
         assertThat(
             response, allOf(
@@ -95,10 +89,7 @@ class QueryTests {
             }
         """.trimIndent()
 
-        val response = graphQLClient.sendRequest(
-            query,
-            object : TypeReference<TestSatelliteDto>() {}
-        )
+        val response = graphQLClient.sendRequest(query, object : TypeReference<TestSatelliteDto>() {})
 
         assertThat(
             response, allOf(
@@ -124,10 +115,7 @@ class QueryTests {
         """.trimIndent()
 
         val exception = assertThrows<RuntimeException> {
-            graphQLClient.sendRequest(
-                query,
-                object : TypeReference<TestSatelliteDto>() {}
-            )
+            graphQLClient.sendRequest(query, object : TypeReference<TestSatelliteDto>() {})
         }
 
         assertThat(

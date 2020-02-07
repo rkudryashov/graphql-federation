@@ -43,7 +43,7 @@ class SatelliteService(
                 .orElseThrow { RuntimeException("Can't find satellite by id=$id") }
                 .lifeExists
         } else {
-            throw RuntimeException("Can't get `lifeExists` property")
+            throw RuntimeException("`lifeExists` property can only be accessed by authenticated users")
         }
     }
 }

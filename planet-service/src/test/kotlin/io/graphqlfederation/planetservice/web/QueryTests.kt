@@ -35,10 +35,7 @@ class QueryTests {
             }
         """.trimIndent()
 
-        val response = graphQLClient.sendRequest(
-            query,
-            object : TypeReference<List<PlanetDto>>() {}
-        )
+        val response = graphQLClient.sendRequest(query, object : TypeReference<List<PlanetDto>>() {})
 
         assertThat(response, hasSize(8))
         assertThat(
@@ -75,10 +72,7 @@ class QueryTests {
             }
         """.trimIndent()
 
-        val response = graphQLClient.sendRequest(
-            query,
-            object : TypeReference<PlanetDto>() {}
-        )
+        val response = graphQLClient.sendRequest(query, object : TypeReference<PlanetDto>() {})
 
         assertThat(
             response, allOf(
@@ -115,10 +109,7 @@ class QueryTests {
             }
         """.trimIndent()
 
-        val response = graphQLClient.sendRequest(
-            query,
-            object : TypeReference<PlanetDto>() {}
-        )
+        val response = graphQLClient.sendRequest(query, object : TypeReference<PlanetDto>() {})
 
         assertThat(
             response, allOf(

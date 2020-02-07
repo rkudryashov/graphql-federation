@@ -32,10 +32,7 @@ class AuthTests {
             }
         """.trimIndent()
 
-        val response = graphQLClient.sendRequest(
-            mutation,
-            object : TypeReference<SignInResponseDto>() {}
-        )
+        val response = graphQLClient.sendRequest(mutation, object : TypeReference<SignInResponseDto>() {})
 
         assertEquals("john_doe", response.username)
 
@@ -65,10 +62,7 @@ class AuthTests {
         """.trimIndent()
 
         val exception = assertThrows<RuntimeException>("Should throw an Exception") {
-            graphQLClient.sendRequest(
-                mutation,
-                object : TypeReference<SignInResponseDto>() {}
-            )
+            graphQLClient.sendRequest(mutation, object : TypeReference<SignInResponseDto>() {})
         }
 
         assertThat(
@@ -88,9 +82,7 @@ class AuthTests {
             }
         """.trimIndent()
 
-        val signInResponse = graphQLClient.sendRequest(
-            mutation,
-            object : TypeReference<SignInResponseDto>() {})
+        val signInResponse = graphQLClient.sendRequest(mutation, object : TypeReference<SignInResponseDto>() {})
 
         val query = """
             query {
@@ -114,10 +106,7 @@ class AuthTests {
             }
         """.trimIndent()
 
-        val response = graphQLClient.sendRequest(
-            query,
-            object : TypeReference<Boolean>() {}
-        )
+        val response = graphQLClient.sendRequest(query, object : TypeReference<Boolean>() {})
 
         assertFalse(response)
     }

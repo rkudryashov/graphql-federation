@@ -36,20 +36,15 @@ class GraphQLFactory(
     fun graphQL(resourceResolver: ResourceResolver): GraphQL {
         val schemaInputStream = resourceResolver.getResourceAsStream("classpath:schema.graphqls").get()
 
-        val entityResolvers = listOf(
-            FederatedEntityResolver<Long, PlanetDto>("Planet", PlanetDto::class.java) { id ->
-                val satellites = satelliteService.getByPlanetId(id)
-                PlanetDto(
-                    id = id,
-                    satellites = satellites.map { satelliteConverter.toDto(it) }
-                )
-            }
-        )
+        val planetResolver = object : FederatedEntityResolver<Long, PlanetDto>("Planet", { id ->
+            val satellites = satelliteService.getByPlanetId(id)
+            PlanetDto(id = id, satellites = satellites.map { satelliteConverter.toDto(it) })
+        }) {}
 
         val transformedGraphQLSchema = FederatedSchemaBuilder()
             .schemaInputStream(schemaInputStream)
             .runtimeWiring(createRuntimeWiring())
-            .federatedEntitiesResolvers(entityResolvers)
+            .federatedEntitiesResolvers(listOf(planetResolver))
             .build()
 
         return GraphQL.newGraphQL(transformedGraphQLSchema)

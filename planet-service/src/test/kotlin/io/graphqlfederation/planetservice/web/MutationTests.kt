@@ -55,10 +55,7 @@ class MutationTests {
               }
         """.trimIndent()
 
-        val response = graphQLClient.sendRequest(
-            mutation,
-            object : TypeReference<PlanetDto>() {}
-        )
+        val response = graphQLClient.sendRequest(mutation, object : TypeReference<PlanetDto>() {})
 
         assertEquals(planetCount + 1, planetRepository.count())
 
@@ -108,10 +105,7 @@ class MutationTests {
               }
         """.trimIndent()
 
-        val response = graphQLClient.sendRequest(
-            mutation,
-            object : TypeReference<PlanetDto>() {}
-        )
+        val response = graphQLClient.sendRequest(mutation, object : TypeReference<PlanetDto>() {})
 
         assertEquals(planetCount + 1, planetRepository.count())
 
@@ -163,10 +157,7 @@ class MutationTests {
         """.trimIndent()
 
         val exception = assertThrows<RuntimeException>("Should throw an Exception") {
-            graphQLClient.sendRequest(
-                mutation,
-                object : TypeReference<PlanetDto>() {}
-            )
+            graphQLClient.sendRequest(mutation, object : TypeReference<PlanetDto>() {})
         }
 
         assertThat(

@@ -43,6 +43,7 @@ class GraphQLFactory(
         val transformedGraphQLSchema = FederatedSchemaBuilder()
             .schemaInputStream(schemaInputStream)
             .runtimeWiring(createRuntimeWiring())
+            .excludeSubscriptionsFromApolloSdl(true)
             .build()
 
         return GraphQL.newGraphQL(transformedGraphQLSchema)
