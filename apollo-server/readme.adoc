@@ -1,0 +1,7 @@
+= Apollo Server
+
+Launch:
+
+* `npm install`
+* be sure you've launched 3 GraphQL Java services
+* `npm run start-gateway`

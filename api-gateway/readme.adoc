@@ -1,7 +1,0 @@
-= GraphQL Gateway
-
-Launch:
-
-* `npm install`
-* be sure you've launched 2 Spring Boot services
-* `npm run start-gateway`
