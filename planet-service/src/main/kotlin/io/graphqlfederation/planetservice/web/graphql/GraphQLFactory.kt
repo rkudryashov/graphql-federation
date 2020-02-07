@@ -26,12 +26,12 @@ import javax.inject.Singleton
 
 @Factory
 class GraphQLFactory(
-    private val getPlanetsFetcher: GetPlanetsFetcher,
-    private val getPlanetFetcher: GetPlanetFetcher,
-    private val getPlanetByNameFetcher: GetPlanetByNameFetcher,
-    private val createPlanetFetcher: CreatePlanetFetcher,
-    private val latestPlanetFetcher: LatestPlanetFetcher,
-    private val paramsFetcher: ParamsFetcher,
+    private val getPlanetsDataFetcher: GetPlanetsDataFetcher,
+    private val getPlanetDataFetcher: GetPlanetDataFetcher,
+    private val getPlanetByNameDataFetcher: GetPlanetByNameDataFetcher,
+    private val createPlanetDataFetcher: CreatePlanetDataFetcher,
+    private val latestPlanetDataFetcher: LatestPlanetDataFetcher,
+    private val paramsDataFetcher: ParamsDataFetcher,
     private val paramsService: ParamsService,
     private val paramsConverter: ParamsConverter
 ) {
@@ -71,18 +71,18 @@ class GraphQLFactory(
         return RuntimeWiring.newRuntimeWiring()
             .type("Query") { builder ->
                 builder
-                    .dataFetcher("getPlanets", getPlanetsFetcher)
-                    .dataFetcher("getPlanet", getPlanetFetcher)
-                    .dataFetcher("getPlanetByName", getPlanetByNameFetcher)
+                    .dataFetcher("getPlanets", getPlanetsDataFetcher)
+                    .dataFetcher("getPlanet", getPlanetDataFetcher)
+                    .dataFetcher("getPlanetByName", getPlanetByNameDataFetcher)
             }
             .type("Mutation") { builder ->
-                builder.dataFetcher("createPlanet", createPlanetFetcher)
+                builder.dataFetcher("createPlanet", createPlanetDataFetcher)
             }
             .type("Subscription") { builder ->
-                builder.dataFetcher("latestPlanet", latestPlanetFetcher)
+                builder.dataFetcher("latestPlanet", latestPlanetDataFetcher)
             }
             .type("Planet") { builder ->
-                builder.dataFetcher("params", paramsFetcher)
+                builder.dataFetcher("params", paramsDataFetcher)
             }
             .type("Params") { builder ->
                 builder.typeResolver(paramsTypeResolver)

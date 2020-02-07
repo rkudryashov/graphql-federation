@@ -9,7 +9,7 @@ import io.graphqlfederation.satelliteservice.web.dto.SatelliteDto
 import javax.inject.Singleton
 
 @Singleton
-class GetSatellitesFetcher(
+class GetSatellitesDataFetcher(
     private val satelliteService: SatelliteService,
     private val satelliteConverter: SatelliteConverter
 ) : DataFetcher<List<SatelliteDto>> {
@@ -18,7 +18,7 @@ class GetSatellitesFetcher(
 }
 
 @Singleton
-class GetSatelliteFetcher(
+class GetSatelliteDataFetcher(
     private val satelliteService: SatelliteService,
     private val satelliteConverter: SatelliteConverter
 ) : DataFetcher<SatelliteDto> {
@@ -29,7 +29,7 @@ class GetSatelliteFetcher(
 }
 
 @Singleton
-class GetSatelliteByNameFetcher(
+class GetSatelliteByNameDataFetcher(
     private val satelliteService: SatelliteService,
     private val satelliteConverter: SatelliteConverter
 ) : DataFetcher<SatelliteDto> {
@@ -40,7 +40,7 @@ class GetSatelliteByNameFetcher(
 }
 
 @Singleton
-class LifeExistsFetcher(
+class LifeExistsDataFetcher(
     private val satelliteService: SatelliteService
 ) : DataFetcher<Satellite.LifeExists> {
     override fun get(env: DataFetchingEnvironment): Satellite.LifeExists {

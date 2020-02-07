@@ -19,10 +19,10 @@ import javax.inject.Singleton
 
 @Factory
 class GraphQLFactory(
-    private val getSatellitesFetcher: GetSatellitesFetcher,
-    private val getSatelliteFetcher: GetSatelliteFetcher,
-    private val getSatelliteByNameFetcher: GetSatelliteByNameFetcher,
-    private val lifeExistsFetcher: LifeExistsFetcher,
+    private val getSatellitesDataFetcher: GetSatellitesDataFetcher,
+    private val getSatelliteDataFetcher: GetSatelliteDataFetcher,
+    private val getSatelliteByNameDataFetcher: GetSatelliteByNameDataFetcher,
+    private val lifeExistsDataFetcher: LifeExistsDataFetcher,
     private val satelliteService: SatelliteService,
     private val satelliteConverter: SatelliteConverter,
     private val customDataFetcherExceptionHandler: CustomDataFetcherExceptionHandler
@@ -57,12 +57,12 @@ class GraphQLFactory(
     private fun createRuntimeWiring(): RuntimeWiring = RuntimeWiring.newRuntimeWiring()
         .type("Query") { builder ->
             builder
-                .dataFetcher("getSatellites", getSatellitesFetcher)
-                .dataFetcher("getSatellite", getSatelliteFetcher)
-                .dataFetcher("getSatelliteByName", getSatelliteByNameFetcher)
+                .dataFetcher("getSatellites", getSatellitesDataFetcher)
+                .dataFetcher("getSatellite", getSatelliteDataFetcher)
+                .dataFetcher("getSatelliteByName", getSatelliteByNameDataFetcher)
         }
         .type("Satellite") { builder ->
-            builder.dataFetcher("lifeExists", lifeExistsFetcher)
+            builder.dataFetcher("lifeExists", lifeExistsDataFetcher)
         }
         .scalar(ExtendedScalars.Date)
         .build()

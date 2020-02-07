@@ -10,7 +10,7 @@ import io.reactivex.Flowable
 import javax.inject.Singleton
 
 @Singleton
-class SignInFetcher(
+class SignInDataFetcher(
     private val authService: AuthService,
     private val objectMapper: ObjectMapper
 ) : DataFetcher<SignInResponseDto> {
@@ -27,7 +27,7 @@ class SignInFetcher(
 }
 
 @Singleton
-class ValidateTokenFetcher(
+class ValidateTokenDataFetcher(
     private val authService: AuthService
 ) : DataFetcher<Boolean> {
     override fun get(env: DataFetchingEnvironment): Boolean {

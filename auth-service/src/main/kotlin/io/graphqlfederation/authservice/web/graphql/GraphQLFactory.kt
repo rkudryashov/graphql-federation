@@ -10,8 +10,8 @@ import javax.inject.Singleton
 
 @Factory
 class GraphQLFactory(
-    private val signInFetcher: SignInFetcher,
-    private val validateTokenFetcher: ValidateTokenFetcher
+    private val signInDataFetcher: SignInDataFetcher,
+    private val validateTokenDataFetcher: ValidateTokenDataFetcher
 ) {
 
     @Bean
@@ -28,10 +28,10 @@ class GraphQLFactory(
 
     private fun createRuntimeWiring() = RuntimeWiring.newRuntimeWiring()
         .type("Query") { builder ->
-            builder.dataFetcher("validateToken", validateTokenFetcher)
+            builder.dataFetcher("validateToken", validateTokenDataFetcher)
         }
         .type("Mutation") { builder ->
-            builder.dataFetcher("signIn", signInFetcher)
+            builder.dataFetcher("signIn", signInDataFetcher)
         }
         .build()
 }
