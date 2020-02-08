@@ -93,6 +93,7 @@ class GraphQLFactory(
             .build()
     }
 
+    // bean's scope is `Singleton`, because `BatchLoader` is stateless
     @Bean
     @Singleton
     fun paramsBatchLoader(): BatchLoader<Long, ParamsDto> = BatchLoader { keys ->
@@ -102,7 +103,7 @@ class GraphQLFactory(
         }
     }
 
-    // bean's default scope is `prototype`
+    // bean's (default) scope is `Prototype`, because `DataLoader` is stateful
     @Bean
     fun dataLoaderRegistry() = DataLoaderRegistry().apply {
         val paramsDataLoader = DataLoader.newDataLoader(paramsBatchLoader())

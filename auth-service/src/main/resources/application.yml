@@ -8,6 +8,10 @@ micronaut:
         httpMethod: POST
         access:
           - isAnonymous()
+      - pattern: /graphiql
+        httpMethod: GET
+        access:
+          - isAnonymous()
     token:
       jwt:
         enabled: true
