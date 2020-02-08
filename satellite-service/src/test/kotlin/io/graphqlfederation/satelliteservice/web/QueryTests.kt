@@ -120,7 +120,7 @@ class QueryTests {
 
         assertThat(
             exception.message,
-            `is`("Exception during execution of GraphQL query/mutation: [There was an error: Can't get `lifeExists` property\n, Cannot return null for non-nullable type: 'LifeExists' within parent 'Satellite' (/getSatelliteByName/lifeExists)\n]")
+            `is`("Exception during execution of GraphQL query/mutation: [There was an error: `lifeExists` property can only be accessed by authenticated users\n, Cannot return null for non-nullable type: 'LifeExists' within parent 'Satellite' (/getSatelliteByName/lifeExists)\n]")
         )
     }
 }
