@@ -6,8 +6,6 @@ subprojects {
     repositories {
         mavenCentral()
         jcenter()
-        // todo add repo to jcenter
-        maven("https://dl.bintray.com/gqljf/maven")
     }
 }
 
