@@ -51,8 +51,8 @@ class GraphQLFactory(
                 ChainedInstrumentation(
                     listOf(
                         FederatedTracingInstrumentation(),
-                        MaxQueryComplexityInstrumentation(60),
-                        MaxQueryDepthInstrumentation(15)
+                        MaxQueryComplexityInstrumentation(50),
+                        MaxQueryDepthInstrumentation(5)
                     )
                 )
             )

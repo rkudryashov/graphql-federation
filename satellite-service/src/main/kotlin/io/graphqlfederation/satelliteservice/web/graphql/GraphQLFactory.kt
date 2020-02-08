@@ -1,8 +1,12 @@
 package io.graphqlfederation.satelliteservice.web.graphql
 
 import graphql.GraphQL
+import graphql.analysis.FieldComplexityCalculator
+import graphql.analysis.MaxQueryComplexityInstrumentation
+import graphql.analysis.MaxQueryDepthInstrumentation
 import graphql.execution.AsyncExecutionStrategy
 import graphql.execution.AsyncSerialExecutionStrategy
+import graphql.execution.instrumentation.ChainedInstrumentation
 import graphql.scalars.ExtendedScalars
 import graphql.schema.idl.RuntimeWiring
 import io.gqljf.federation.FederatedEntityResolver
@@ -50,7 +54,17 @@ class GraphQLFactory(
         return GraphQL.newGraphQL(transformedGraphQLSchema)
             .queryExecutionStrategy(AsyncExecutionStrategy(customDataFetcherExceptionHandler))
             .mutationExecutionStrategy(AsyncSerialExecutionStrategy(customDataFetcherExceptionHandler))
-            .instrumentation(FederatedTracingInstrumentation())
+            .instrumentation(
+                ChainedInstrumentation(
+                    listOf(
+                        FederatedTracingInstrumentation(),
+                        MaxQueryComplexityInstrumentation(50, FieldComplexityCalculator { env, child ->
+                            1 + child
+                        }),
+                        MaxQueryDepthInstrumentation(5)
+                    )
+                )
+            )
             .build()
     }
 
