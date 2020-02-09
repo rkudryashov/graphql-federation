@@ -17,10 +17,10 @@ class QueryTests {
     private lateinit var graphQLClient: GraphQLClient
 
     @Test
-    fun testGetPlanets() {
+    fun testPlanets() {
         val query = """
             {
-              getPlanets {
+              planets {
                 id
                 name
                 type
@@ -53,11 +53,11 @@ class QueryTests {
     }
 
     @Test
-    fun testGetById() {
+    fun testPlanetById() {
         val earthId = 3
         val query = """
             {
-              getPlanet(id: $earthId) {
+              planet(id: $earthId) {
                 id
                 name
                 type
@@ -90,11 +90,11 @@ class QueryTests {
     }
 
     @Test
-    fun testGetByName() {
+    fun testPlanetByName() {
         val earthName = "Earth"
         val query = """
             {
-              getPlanetByName(name: "$earthName") {
+              planetByName(name: "$earthName") {
                 id
                 name
                 type

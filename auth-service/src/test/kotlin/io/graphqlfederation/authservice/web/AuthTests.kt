@@ -22,7 +22,7 @@ class AuthTests {
     private lateinit var objectMapper: ObjectMapper
 
     @Test
-    fun testGetToken() {
+    fun testSignIn() {
         val mutation = """
             mutation {
                 signIn(data: { username: "john_doe", password: "password" }) {
@@ -51,7 +51,7 @@ class AuthTests {
     }
 
     @Test
-    fun testGetNoToken() {
+    fun testSignInFails() {
         val mutation = """
             mutation {
                 signIn(data: { username: "john_doe", password: "password1" }) {

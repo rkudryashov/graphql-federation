@@ -1,7 +1,7 @@
 type Query {
-    getPlanets: [Planet!]!
-    getPlanet(id: ID!): Planet!
-    getPlanetByName(name: String!): Planet!
+    planets: [Planet!]!
+    planet(id: ID!): Planet!
+    planetByName(name: String!): Planet!
 }
 
 type Mutation {

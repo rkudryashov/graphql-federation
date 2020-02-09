@@ -1,7 +1,7 @@
 type Query {
-    getSatellites: [Satellite!]!
-    getSatellite(id: ID!): Satellite!
-    getSatelliteByName(name: String!): Satellite!
+    satellites: [Satellite!]!
+    satellite(id: ID!): Satellite!
+    satelliteByName(name: String!): Satellite!
 }
 
 type Satellite {

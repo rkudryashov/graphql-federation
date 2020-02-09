@@ -23,9 +23,9 @@ import javax.inject.Singleton
 
 @Factory
 class GraphQLFactory(
-    private val getSatellitesDataFetcher: GetSatellitesDataFetcher,
-    private val getSatelliteDataFetcher: GetSatelliteDataFetcher,
-    private val getSatelliteByNameDataFetcher: GetSatelliteByNameDataFetcher,
+    private val satellitesDataFetcher: SatellitesDataFetcher,
+    private val satelliteDataFetcher: SatelliteDataFetcher,
+    private val satelliteByNameDataFetcher: SatelliteByNameDataFetcher,
     private val lifeExistsDataFetcher: LifeExistsDataFetcher,
     private val satelliteService: SatelliteService,
     private val satelliteConverter: SatelliteConverter,
@@ -71,9 +71,9 @@ class GraphQLFactory(
     private fun createRuntimeWiring(): RuntimeWiring = RuntimeWiring.newRuntimeWiring()
         .type("Query") { builder ->
             builder
-                .dataFetcher("getSatellites", getSatellitesDataFetcher)
-                .dataFetcher("getSatellite", getSatelliteDataFetcher)
-                .dataFetcher("getSatelliteByName", getSatelliteByNameDataFetcher)
+                .dataFetcher("satellites", satellitesDataFetcher)
+                .dataFetcher("satellite", satelliteDataFetcher)
+                .dataFetcher("satelliteByName", satelliteByNameDataFetcher)
         }
         .type("Satellite") { builder ->
             builder.dataFetcher("lifeExists", lifeExistsDataFetcher)

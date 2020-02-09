@@ -9,7 +9,7 @@ import io.graphqlfederation.satelliteservice.web.dto.SatelliteDto
 import javax.inject.Singleton
 
 @Singleton
-class GetSatellitesDataFetcher(
+class SatellitesDataFetcher(
     private val satelliteService: SatelliteService,
     private val satelliteConverter: SatelliteConverter
 ) : DataFetcher<List<SatelliteDto>> {
@@ -18,7 +18,7 @@ class GetSatellitesDataFetcher(
 }
 
 @Singleton
-class GetSatelliteDataFetcher(
+class SatelliteDataFetcher(
     private val satelliteService: SatelliteService,
     private val satelliteConverter: SatelliteConverter
 ) : DataFetcher<SatelliteDto> {
@@ -29,7 +29,7 @@ class GetSatelliteDataFetcher(
 }
 
 @Singleton
-class GetSatelliteByNameDataFetcher(
+class SatelliteByNameDataFetcher(
     private val satelliteService: SatelliteService,
     private val satelliteConverter: SatelliteConverter
 ) : DataFetcher<SatelliteDto> {

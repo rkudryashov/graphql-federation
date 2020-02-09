@@ -18,10 +18,10 @@ class QueryTests {
     private lateinit var graphQLClient: GraphQLClient
 
     @Test
-    fun testGetSatellites() {
+    fun testSatellites() {
         val query = """
             {
-              getSatellites {
+              satellites {
                 id
                 name
                 firstSpacecraftLandingDate
@@ -50,11 +50,11 @@ class QueryTests {
     }
 
     @Test
-    fun testGetSatelliteById() {
+    fun testSatelliteById() {
         val moonId = 1
         val query = """
             {
-              getSatellite(id: $moonId) {
+              satellite(id: $moonId) {
                 id
                 name
                 firstSpacecraftLandingDate
@@ -77,11 +77,11 @@ class QueryTests {
     }
 
     @Test
-    fun testGetSatelliteByName() {
+    fun testSatelliteByName() {
         val titanName = "Titan"
         val query = """
             {
-              getSatelliteByName(name: "$titanName") {
+              satelliteByName(name: "$titanName") {
                 id
                 name
                 firstSpacecraftLandingDate
@@ -101,11 +101,11 @@ class QueryTests {
     }
 
     @Test
-    fun testGetSatelliteByNameShouldThrowException() {
+    fun testSatelliteByNameShouldThrowException() {
         val titanName = "Titan"
         val query = """
             {
-              getSatelliteByName(name: "$titanName") {
+              satelliteByName(name: "$titanName") {
                 id
                 name
                 lifeExists
@@ -120,7 +120,7 @@ class QueryTests {
 
         assertThat(
             exception.message,
-            `is`("Exception during execution of GraphQL query/mutation: [There was an error: `lifeExists` property can only be accessed by authenticated users\n, Cannot return null for non-nullable type: 'LifeExists' within parent 'Satellite' (/getSatelliteByName/lifeExists)\n]")
+            `is`("Exception during execution of GraphQL query/mutation: [There was an error: `lifeExists` property can only be accessed by authenticated users\n, Cannot return null for non-nullable type: 'LifeExists' within parent 'Satellite' (/satelliteByName/lifeExists)\n]")
         )
     }
 }
