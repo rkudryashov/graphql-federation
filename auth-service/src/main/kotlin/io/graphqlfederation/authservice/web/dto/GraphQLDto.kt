@@ -5,8 +5,8 @@ class GraphQLRequest(
     val query: String
 )
 
-class GraphQLResponse<T>(
-    val data: T?,
+class GraphQLResponse(
+    val data: Map<String, Any?>?,
     val errors: List<GraphQLError>?
 )
 
