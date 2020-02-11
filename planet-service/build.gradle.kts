@@ -1,11 +1,10 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-// todo remove unneeded
 val kotlinVersion: String by project
 val micronautVersion: String by project
 val graphqlJavaFederationVersion: String by project
-val okhttpVersion: String by project
+val okHttpVersion: String by project
 val logbackVersion: String by project
 val junitVersion: String by project
 val hamcrestVersion: String by project
@@ -19,7 +18,7 @@ plugins {
 }
 
 application {
-    mainClassName = "example.Application"
+    mainClassName = "io.graphqlfederation.planetservice.PlanetServiceApplication"
 }
 
 dependencies {
@@ -35,7 +34,7 @@ dependencies {
     implementation("io.micronaut.graphql:micronaut-graphql")
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
     implementation("io.gqljf:graphql-java-federation:$graphqlJavaFederationVersion")
-    implementation("com.squareup.okhttp3:okhttp:$okhttpVersion")
+    implementation("com.squareup.okhttp3:okhttp:$okHttpVersion")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     runtimeOnly("io.micronaut.configuration:micronaut-jdbc-hikari")
     runtimeOnly("com.h2database:h2")

@@ -22,7 +22,7 @@ jpa:
         show_sql: true
 
 graphql:
-  graphiql.enabled: true
+  graphiql:
+    enabled: true
   graphql-ws:
     enabled: true
-

@@ -32,15 +32,15 @@ class GraphQLFactory(
     private val customDataFetcherExceptionHandler: CustomDataFetcherExceptionHandler
 ) {
 
-    // todo use
-    private val log = LoggerFactory.getLogger(this.javaClass)
-
     @Bean
     @Singleton
     fun graphQL(resourceResolver: ResourceResolver): GraphQL {
         val schemaInputStream = resourceResolver.getResourceAsStream("classpath:schema.graphqls").get()
 
+        val log = LoggerFactory.getLogger(FederatedEntityResolver::class.java)
+
         val planetEntityResolver = object : FederatedEntityResolver<Long, PlanetDto>("Planet", { id ->
+            log.info("`Planet` entity with id=$id was requested")
             val satellites = satelliteService.getByPlanetId(id)
             PlanetDto(id = id, satellites = satellites.map { satelliteConverter.toDto(it) })
         }) {}

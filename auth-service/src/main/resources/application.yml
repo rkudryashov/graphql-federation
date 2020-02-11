@@ -19,7 +19,7 @@ micronaut:
           secret:
             generator:
               base64: true
-              # In real life secret should NOT be under source control (instead of it, for example, in environment variable).
+              # In real life, the secret should NOT be under source control (instead of it, for example, in environment variable).
               # It is here just for simplicity.
               secret: 'TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZWxpdA=='
               jws-algorithm: HS256
@@ -44,4 +44,5 @@ jpa:
         show_sql: true
 
 graphql:
-  graphiql.enabled: true
+  graphiql:
+    enabled: true
