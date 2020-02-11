@@ -23,10 +23,12 @@ class GraphQLClient(
     private val json = "application/json".toMediaType()
     private val url by lazy { "http://localhost:$port/graphql" }
 
-    fun <T> sendRequest(query: String, responseType: TypeReference<T>): T {
+    fun <T> sendRequest(query: String, responseType: TypeReference<T>): T = sendRequest(query, null, null, responseType)
+
+    fun <T> sendRequest(query: String, variables: Map<String, Any>?, operationName: String?, responseType: TypeReference<T>): T {
         val httpUrl = url.toHttpUrl().newBuilder().build()
 
-        val requestBodyAsString = objectMapper.writeValueAsString(GraphQLRequest(null, query)).toRequestBody(json)
+        val requestBodyAsString = objectMapper.writeValueAsString(GraphQLRequest(query, variables, operationName)).toRequestBody(json)
 
         val request = Request.Builder()
             .url(httpUrl)

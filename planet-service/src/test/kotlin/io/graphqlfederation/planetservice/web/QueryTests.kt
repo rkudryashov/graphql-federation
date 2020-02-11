@@ -16,22 +16,37 @@ class QueryTests {
     @Inject
     private lateinit var graphQLClient: GraphQLClient
 
+    private val testingFieldsFragment = """
+        fragment testingFields on Planet { 
+            id
+            name
+            type
+            params {
+                meanRadius
+                earthsMass
+                ... on InhabitedPlanetParams {
+                    population
+                }
+            }
+        }
+    """.trimIndent()
+
     @Test
     fun testPlanets() {
         val query = """
             {
-              planets {
-                id
-                name
-                type
-                params {
-                  meanRadius
-                  earthsMass
-                  ... on InhabitedPlanetParams {
-                    population
-                  }
+                planets {
+                    id
+                    name
+                    type
+                    params {
+                        meanRadius
+                        earthsMass
+                        ... on InhabitedPlanetParams {
+                            population
+                        }
+                    }
                 }
-              }
             }
         """.trimIndent()
 
@@ -57,19 +72,12 @@ class QueryTests {
         val earthId = 3
         val query = """
             {
-              planet(id: $earthId) {
-                id
-                name
-                type
-                params {
-                  meanRadius
-                  earthsMass
-                  ... on InhabitedPlanetParams {
-                    population
-                  }
+                planet(id: $earthId) {
+                    ... testingFields
                 }
-              }
             }
+
+            $testingFieldsFragment
         """.trimIndent()
 
         val response = graphQLClient.sendRequest(query, object : TypeReference<PlanetDto>() {})
@@ -91,25 +99,18 @@ class QueryTests {
 
     @Test
     fun testPlanetByName() {
-        val earthName = "Earth"
+        val variables = mapOf("name" to "Earth")
         val query = """
-            {
-              planetByName(name: "$earthName") {
-                id
-                name
-                type
-                params {
-                  meanRadius
-                  earthsMass
-                  ... on InhabitedPlanetParams {
-                    population
-                  }
+            query testPlanetByName(${'$'}name: String!){
+                planetByName(name: ${'$'}name) {
+                    ... testingFields
                 }
-              }
             }
+
+            $testingFieldsFragment
         """.trimIndent()
 
-        val response = graphQLClient.sendRequest(query, object : TypeReference<PlanetDto>() {})
+        val response = graphQLClient.sendRequest(query, variables, null, object : TypeReference<PlanetDto>() {})
 
         assertThat(
             response, allOf(

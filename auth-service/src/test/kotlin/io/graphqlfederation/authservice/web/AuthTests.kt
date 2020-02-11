@@ -90,10 +90,7 @@ class AuthTests {
             }
         """.trimIndent()
 
-        val response = graphQLClient.sendRequest(
-            query,
-            object : TypeReference<Boolean>() {}
-        )
+        val response = graphQLClient.sendRequest(query, object : TypeReference<Boolean>() {})
 
         assertTrue(response)
     }

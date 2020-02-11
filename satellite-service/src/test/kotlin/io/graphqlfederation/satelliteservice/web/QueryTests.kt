@@ -17,16 +17,24 @@ class QueryTests {
     @Inject
     private lateinit var graphQLClient: GraphQLClient
 
+    private val testingFieldsFragment = """
+        fragment testingFields on Satellite {
+            id
+            name
+            firstSpacecraftLandingDate
+        }
+    """.trimIndent()
+
     @Test
     fun testSatellites() {
         val query = """
             {
-              satellites {
-                id
-                name
-                firstSpacecraftLandingDate
-              }
+                satellites {
+                    ... testingFields
+                }
             }
+
+            $testingFieldsFragment
         """.trimIndent()
 
         val response = graphQLClient.sendRequest(query, object : TypeReference<List<TestSatelliteDto>>() {})
@@ -54,12 +62,12 @@ class QueryTests {
         val moonId = 1
         val query = """
             {
-              satellite(id: $moonId) {
-                id
-                name
-                firstSpacecraftLandingDate
-              }
+                satellite(id: $moonId) {
+                    ... testingFields
+                }
             }
+
+            $testingFieldsFragment            
         """.trimIndent()
 
         val response = graphQLClient.sendRequest(query, object : TypeReference<TestSatelliteDto>() {})
@@ -81,12 +89,12 @@ class QueryTests {
         val titanName = "Titan"
         val query = """
             {
-              satelliteByName(name: "$titanName") {
-                id
-                name
-                firstSpacecraftLandingDate
-              }
+                satelliteByName(name: "$titanName") {
+                    ... testingFields
+                }
             }
+
+            $testingFieldsFragment
         """.trimIndent()
 
         val response = graphQLClient.sendRequest(query, object : TypeReference<TestSatelliteDto>() {})
@@ -105,13 +113,13 @@ class QueryTests {
         val titanName = "Titan"
         val query = """
             {
-              satelliteByName(name: "$titanName") {
-                id
-                name
-                lifeExists
-                firstSpacecraftLandingDate
-              }
+                satelliteByName(name: "$titanName") {
+                    ... testingFields
+                    lifeExists
+                }
             }
+
+            $testingFieldsFragment
         """.trimIndent()
 
         val exception = assertThrows<RuntimeException> {

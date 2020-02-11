@@ -28,6 +28,21 @@ class MutationTests {
     @Inject
     private lateinit var paramsRepository: ParamsRepository
 
+    private val testingFieldsFragment = """
+        fragment testingFields on Planet { 
+            id
+            name
+            type
+            params {
+                meanRadius
+                earthsMass
+                ... on InhabitedPlanetParams {
+                    population
+                }
+            }
+        }
+    """.trimIndent()
+
     @Test
     fun testCreateInhabitedPlanet() {
         val planetCount = planetRepository.count()
@@ -39,20 +54,13 @@ class MutationTests {
         val population = 0.0001
 
         val mutation = """
-              mutation {
+            mutation {
                 createPlanet (name: "$name", type: $type, params: { meanRadius: $meanRadius, earthsMass: $earthsMass, population: $population}) {
-                    id
-                    name
-                    type
-                    params {
-                        meanRadius
-                        earthsMass
-                        ... on InhabitedPlanetParams {
-                            population
-                        }
-                    }
+                    ... testingFields
                 }
-              }
+            }
+
+            $testingFieldsFragment
         """.trimIndent()
 
         val response = graphQLClient.sendRequest(mutation, object : TypeReference<PlanetDto>() {})
@@ -92,17 +100,13 @@ class MutationTests {
         val earthsMass = 0.03
 
         val mutation = """
-              mutation {
+            mutation {
                 createPlanet (name: "$name", type: $type, params: { meanRadius: $meanRadius, earthsMass: $earthsMass }) {
-                    id
-                    name
-                    type
-                    params {
-                        meanRadius
-                        earthsMass
-                    }
+                    ... testingFields
                 }
-              }
+            }
+
+            $testingFieldsFragment
         """.trimIndent()
 
         val response = graphQLClient.sendRequest(mutation, object : TypeReference<PlanetDto>() {})
@@ -140,20 +144,13 @@ class MutationTests {
         val earthsMass = 15.1
 
         val mutation = """
-              mutation {
+            mutation {
                 createPlanet (name: "$name", type: $type, params: { meanRadius: $meanRadius, earthsMass: $earthsMass }) {
-                    id
-                    name
-                    type
-                    params {
-                        meanRadius
-                        earthsMass
-                        ... on InhabitedPlanetParams {
-                            population
-                        }
-                    }
+                    ... testingFields
                 }
-              }
+            }
+
+            $testingFieldsFragment
         """.trimIndent()
 
         val exception = assertThrows<RuntimeException>("Should throw an Exception") {

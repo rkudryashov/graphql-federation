@@ -1,8 +1,9 @@
 package io.graphqlfederation.satelliteservice.web.dto
 
 class GraphQLRequest(
-    val variables: Map<String, Any>?,
-    val query: String
+    val query: String,
+    val variables: Map<String, Any?>?,
+    val operationName: String?
 )
 
 class GraphQLResponse(
