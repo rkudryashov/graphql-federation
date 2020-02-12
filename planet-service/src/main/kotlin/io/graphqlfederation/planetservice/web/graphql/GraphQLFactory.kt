@@ -50,9 +50,10 @@ class GraphQLFactory(
             .instrumentation(
                 ChainedInstrumentation(
                     listOf(
-                        FederatedTracingInstrumentation(),
-                        MaxQueryComplexityInstrumentation(50),
-                        MaxQueryDepthInstrumentation(5)
+                        FederatedTracingInstrumentation()
+                        // uncomment if you need to enable the instrumentations. but this may affect showing documentation in a GraphQL client
+                        // MaxQueryComplexityInstrumentation(50),
+                        // MaxQueryDepthInstrumentation(5)
                     )
                 )
             )
