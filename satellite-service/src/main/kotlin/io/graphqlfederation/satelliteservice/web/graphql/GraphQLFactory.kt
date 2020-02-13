@@ -9,7 +9,7 @@ import graphql.execution.AsyncSerialExecutionStrategy
 import graphql.execution.instrumentation.ChainedInstrumentation
 import graphql.scalars.ExtendedScalars
 import graphql.schema.idl.RuntimeWiring
-import io.gqljf.federation.FederatedEntityResolver
+import io.gqljf.federation.FederatedEntityFetcher
 import io.gqljf.federation.FederatedSchemaBuilder
 import io.gqljf.federation.tracing.FederatedTracingInstrumentation
 import io.graphqlfederation.satelliteservice.misc.SatelliteConverter
@@ -37,9 +37,9 @@ class GraphQLFactory(
     fun graphQL(resourceResolver: ResourceResolver): GraphQL {
         val schemaInputStream = resourceResolver.getResourceAsStream("classpath:schema.graphqls").get()
 
-        val log = LoggerFactory.getLogger(FederatedEntityResolver::class.java)
+        val log = LoggerFactory.getLogger(FederatedEntityFetcher::class.java)
 
-        val planetEntityResolver = object : FederatedEntityResolver<Long, PlanetDto>("Planet", { id ->
+        val planetEntityFetcher = object : FederatedEntityFetcher<Long, PlanetDto>("Planet", { id ->
             log.info("`Planet` entity with id=$id was requested")
             val satellites = satelliteService.getByPlanetId(id)
             PlanetDto(id = id, satellites = satellites.map { satelliteConverter.toDto(it) })
@@ -48,7 +48,7 @@ class GraphQLFactory(
         val transformedGraphQLSchema = FederatedSchemaBuilder()
             .schemaInputStream(schemaInputStream)
             .runtimeWiring(createRuntimeWiring())
-            .federatedEntitiesResolvers(listOf(planetEntityResolver))
+            .federatedEntitiesFetchers(listOf(planetEntityFetcher))
             .build()
 
         return GraphQL.newGraphQL(transformedGraphQLSchema)
