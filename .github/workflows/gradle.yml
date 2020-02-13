@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches:
+    - master
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  gradle:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ 11, 13 ]
+    name: Test on JDK ${{ matrix.java }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ matrix.java }}
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Gradle build
+      run: ./gradlew build
+  npm:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [12.x]
+    name: Test on Node.js ${{ matrix.node }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+      - name: npm install
+        run: npm install
