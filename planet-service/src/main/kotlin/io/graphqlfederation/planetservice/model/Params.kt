@@ -1,5 +1,6 @@
 package io.graphqlfederation.planetservice.model
 
+import java.math.BigDecimal
 import javax.persistence.*
 
 @Entity
@@ -14,22 +15,22 @@ sealed class Params(
     @Column
     val meanRadius: Double,
 
-    @Column
-    val earthsMass: Double
+    @Column(precision = 30, scale = 2)
+    val mass: BigDecimal
 )
 
 @Entity
 class InhabitedPlanetParams(
     id: Long = 0,
     meanRadius: Double,
-    earthsMass: Double,
+    mass: BigDecimal,
     @Column
     val population: Double
-) : Params(id, meanRadius, earthsMass)
+) : Params(id, meanRadius, mass)
 
 @Entity
 class UninhabitedPlanetParams(
     id: Long = 0,
     meanRadius: Double,
-    earthsMass: Double
-) : Params(id, meanRadius, earthsMass)
+    mass: BigDecimal
+) : Params(id, meanRadius, mass)

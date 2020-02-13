@@ -8,6 +8,7 @@ import io.micronaut.test.annotation.MicronautTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
 import javax.inject.Inject
 
 @MicronautTest
@@ -23,7 +24,7 @@ class QueryTests {
             type
             params {
                 meanRadius
-                earthsMass
+                mass
                 ... on InhabitedPlanetParams {
                     population
                 }
@@ -41,7 +42,7 @@ class QueryTests {
                     type
                     params {
                         meanRadius
-                        earthsMass
+                        mass
                         ... on InhabitedPlanetParams {
                             population
                         }
@@ -90,7 +91,7 @@ class QueryTests {
                 hasProperty(
                     "params", allOf(
                         hasProperty("meanRadius", `is`(6371.0)),
-                        hasProperty("earthsMass", `is`(1.0))
+                        hasProperty("mass", comparesEqualTo(5.97.toBigDecimal().multiply(BigDecimal.TEN.pow(24))))
                     )
                 )
             )
@@ -120,7 +121,7 @@ class QueryTests {
                 hasProperty(
                     "params", allOf(
                         hasProperty("meanRadius", `is`(6371.0)),
-                        hasProperty("earthsMass", `is`(1.0))
+                        hasProperty("mass", comparesEqualTo(5.97.toBigDecimal().multiply(BigDecimal.TEN.pow(24))))
                     )
                 )
             )

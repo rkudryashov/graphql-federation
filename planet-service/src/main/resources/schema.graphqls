@@ -23,19 +23,19 @@ type Planet @key(fields: "id") {
 
 interface Params {
     meanRadius: Float!
-    earthsMass: Float!
+    mass: BigDecimal!
 }
 
 type InhabitedPlanetParams implements Params {
     meanRadius: Float!
-    earthsMass: Float!
+    mass: BigDecimal!
     # in billions
     population: Float!
 }
 
 type UninhabitedPlanetParams implements Params {
     meanRadius: Float!
-    earthsMass: Float!
+    mass: BigDecimal!
 }
 
 enum Type {
@@ -47,6 +47,13 @@ enum Type {
 
 input ParamsInput {
     meanRadius: Float!
-    earthsMass: Float!
+    mass: MassInput!
     population: Float
 }
+
+input MassInput {
+    number: Float!
+    tenPower: Int!
+}
+
+scalar BigDecimal

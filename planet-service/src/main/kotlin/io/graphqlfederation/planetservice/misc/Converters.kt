@@ -1,11 +1,11 @@
 package io.graphqlfederation.planetservice.misc
 
-import io.graphqlfederation.planetservice.model.Params
 import io.graphqlfederation.planetservice.model.InhabitedPlanetParams
+import io.graphqlfederation.planetservice.model.Params
 import io.graphqlfederation.planetservice.model.Planet
 import io.graphqlfederation.planetservice.model.UninhabitedPlanetParams
-import io.graphqlfederation.planetservice.web.dto.ParamsDto
 import io.graphqlfederation.planetservice.web.dto.InhabitedPlanetParamsDto
+import io.graphqlfederation.planetservice.web.dto.ParamsDto
 import io.graphqlfederation.planetservice.web.dto.PlanetDto
 import io.graphqlfederation.planetservice.web.dto.UninhabitedPlanetParamsDto
 import javax.inject.Singleton
@@ -34,13 +34,13 @@ class ParamsConverter : GenericConverter<Params, ParamsDto> {
         is InhabitedPlanetParams -> InhabitedPlanetParamsDto(
             id = entity.id,
             meanRadius = entity.meanRadius,
-            earthsMass = entity.earthsMass,
+            mass = entity.mass,
             population = entity.population
         )
         is UninhabitedPlanetParams -> UninhabitedPlanetParamsDto(
             id = entity.id,
             meanRadius = entity.meanRadius,
-            earthsMass = entity.earthsMass
+            mass = entity.mass
         )
     }
 }

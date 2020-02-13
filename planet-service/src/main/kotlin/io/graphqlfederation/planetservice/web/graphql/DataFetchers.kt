@@ -12,6 +12,7 @@ import io.graphqlfederation.planetservice.web.dto.PlanetDto
 import org.dataloader.DataLoader
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
+import java.math.BigDecimal
 import java.util.concurrent.CompletableFuture
 import javax.inject.Singleton
 
@@ -66,7 +67,8 @@ class CreatePlanetDataFetcher(
             name,
             type,
             paramsInputDto.meanRadius,
-            paramsInputDto.earthsMass,
+            paramsInputDto.mass.number,
+            paramsInputDto.mass.tenPower,
             paramsInputDto.population
         )
 

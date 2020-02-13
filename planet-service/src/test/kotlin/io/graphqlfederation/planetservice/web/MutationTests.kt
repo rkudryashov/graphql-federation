@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import java.math.BigDecimal
 import javax.inject.Inject
 
 @MicronautTest
@@ -35,7 +36,7 @@ class MutationTests {
             type
             params {
                 meanRadius
-                earthsMass
+                mass
                 ... on InhabitedPlanetParams {
                     population
                 }
@@ -50,12 +51,13 @@ class MutationTests {
         val name = "Unexpected inhabited planet"
         val type = Planet.Type.DWARF_PLANET
         val meanRadius = 10.2
-        val earthsMass = 0.03
+        val massNumber = 0.1
+        val massTenPower = 25
         val population = 0.0001
 
         val mutation = """
             mutation {
-                createPlanet (name: "$name", type: $type, params: { meanRadius: $meanRadius, earthsMass: $earthsMass, population: $population}) {
+                createPlanet (name: "$name", type: $type, params: { meanRadius: $meanRadius, mass: { number: $massNumber, tenPower: $massTenPower }, population: $population}) {
                     ... testingFields
                 }
             }
@@ -69,6 +71,8 @@ class MutationTests {
 
         val createdPlanetId = response.id
 
+        val massMatcher = comparesEqualTo(massNumber.toBigDecimal().multiply(BigDecimal.TEN.pow(massTenPower)))
+
         assertThat(
             response, allOf(
                 hasProperty("id", `is`(createdPlanetId)),
@@ -77,14 +81,13 @@ class MutationTests {
                 hasProperty(
                     "params", allOf(
                         hasProperty("meanRadius", `is`(meanRadius)),
-                        hasProperty("earthsMass", `is`(earthsMass))
+                        hasProperty("mass", massMatcher)
                     )
                 )
             )
         )
 
-        val createdPlanet =
-            planetRepository.findById(createdPlanetId).orElseThrow { RuntimeException("Unexpected database state") }
+        val createdPlanet = planetRepository.findById(createdPlanetId).orElseThrow { RuntimeException("Unexpected database state") }
         val createdPlanetParams = paramsRepository.findById(createdPlanet.paramsId)
         assertTrue(createdPlanetParams.isPresent)
         assertEquals(InhabitedPlanetParams::class.java, createdPlanetParams.get()::class.java)
@@ -94,14 +97,15 @@ class MutationTests {
     fun testCreateUninhabitedPlanet() {
         val planetCount = planetRepository.count()
 
-        val name = "Unexpected uninhabited planet"
+        val name = "Pluto"
         val type = Planet.Type.DWARF_PLANET
         val meanRadius = 10.2
-        val earthsMass = 0.03
+        val massNumber = 0.0146
+        val massTenPower = 24
 
         val mutation = """
             mutation {
-                createPlanet (name: "$name", type: $type, params: { meanRadius: $meanRadius, earthsMass: $earthsMass }) {
+                createPlanet (name: "$name", type: $type, params: { meanRadius: $meanRadius, mass: { number: $massNumber, tenPower: $massTenPower }}) {
                     ... testingFields
                 }
             }
@@ -115,6 +119,8 @@ class MutationTests {
 
         val createdPlanetId = response.id
 
+        val massMatcher = comparesEqualTo(massNumber.toBigDecimal().multiply(BigDecimal.TEN.pow(massTenPower)))
+
         assertThat(
             response, allOf(
                 hasProperty("id", `is`(createdPlanetId)),
@@ -123,14 +129,13 @@ class MutationTests {
                 hasProperty(
                     "params", allOf(
                         hasProperty("meanRadius", `is`(meanRadius)),
-                        hasProperty("earthsMass", `is`(earthsMass))
+                        hasProperty("mass", massMatcher)
                     )
                 )
             )
         )
 
-        val createdPlanet =
-            planetRepository.findById(createdPlanetId).orElseThrow { RuntimeException("Unexpected database state") }
+        val createdPlanet = planetRepository.findById(createdPlanetId).orElseThrow { RuntimeException("Unexpected database state") }
         val createdPlanetParams = paramsRepository.findById(createdPlanet.paramsId)
         assertTrue(createdPlanetParams.isPresent)
         assertEquals(UninhabitedPlanetParams::class.java, createdPlanetParams.get()::class.java)
@@ -141,11 +146,12 @@ class MutationTests {
         val name = "Neptune"
         val type = Planet.Type.ICE_GIANT
         val meanRadius = 107.5
-        val earthsMass = 15.1
+        val massNumber = 102.0
+        val massTenPower = 24
 
         val mutation = """
             mutation {
-                createPlanet (name: "$name", type: $type, params: { meanRadius: $meanRadius, earthsMass: $earthsMass }) {
+                createPlanet (name: "$name", type: $type, params: { meanRadius: $meanRadius, mass: { number: $massNumber, tenPower: $massTenPower }}) {
                     ... testingFields
                 }
             }

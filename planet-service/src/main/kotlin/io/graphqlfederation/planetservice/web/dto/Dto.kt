@@ -1,6 +1,7 @@
 package io.graphqlfederation.planetservice.web.dto
 
 import io.graphqlfederation.planetservice.model.Planet
+import java.math.BigDecimal
 
 class PlanetDto(
     val id: Long,
@@ -12,24 +13,29 @@ class PlanetDto(
 open class ParamsDto(
     val id: Long,
     val meanRadius: Double = 0.0,
-    val earthsMass: Double = 0.0
+    val mass: BigDecimal = BigDecimal.ZERO
 )
 
 class InhabitedPlanetParamsDto(
     id: Long,
     meanRadius: Double,
-    earthsMass: Double,
+    mass: BigDecimal,
     val population: Double
-) : ParamsDto(id, meanRadius, earthsMass)
+) : ParamsDto(id, meanRadius, mass)
 
 class UninhabitedPlanetParamsDto(
     id: Long,
     meanRadius: Double,
-    earthsMass: Double
-) : ParamsDto(id, meanRadius, earthsMass)
+    mass: BigDecimal
+) : ParamsDto(id, meanRadius, mass)
 
 class ParamsInputDto(
     val meanRadius: Double,
-    val earthsMass: Double,
+    val mass: MassInputDto,
     val population: Double
+)
+
+class MassInputDto(
+    val number: Double,
+    val tenPower: Int
 )
