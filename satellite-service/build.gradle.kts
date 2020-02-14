@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val kotlinVersion: String by project
 val micronautVersion: String by project
+val micronautGraphQLVersion: String by project
 val graphqlJavaFederationVersion: String by project
 val graphqlJavaExtendedScalarsVersion: String by project
 val okHttpVersion: String by project
@@ -33,7 +34,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
     implementation("io.micronaut:micronaut-http-server-netty")
     implementation("io.micronaut:micronaut-security-jwt")
-    implementation("io.micronaut.graphql:micronaut-graphql")
+    implementation("io.micronaut.graphql:micronaut-graphql:$micronautGraphQLVersion")
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
     implementation("io.gqljf:graphql-java-federation:$graphqlJavaFederationVersion")
     implementation("com.graphql-java:graphql-java-extended-scalars:$graphqlJavaExtendedScalarsVersion")
