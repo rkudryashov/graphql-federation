@@ -32,7 +32,7 @@ class UninhabitedPlanetParamsDto(
 class ParamsInputDto(
     val meanRadius: Double,
     val mass: MassInputDto,
-    val population: Double
+    val population: Double?
 )
 
 class MassInputDto(

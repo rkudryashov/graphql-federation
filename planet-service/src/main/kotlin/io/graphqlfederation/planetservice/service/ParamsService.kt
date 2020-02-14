@@ -12,19 +12,14 @@ class ParamsService(
     private val repository: ParamsRepository
 ) {
 
-    fun create(meanRadius: Double, mass: BigDecimal, population: Double) = when (population) {
-        0.0 -> UninhabitedPlanetParams(
-            meanRadius = meanRadius,
-            mass = mass
-        )
-        else -> InhabitedPlanetParams(
-            meanRadius = meanRadius,
-            mass = mass,
-            population = population
-        )
-    }.also {
-        repository.save(it)
-    }
+    fun create(meanRadius: Double, mass: BigDecimal, population: Double?) = (if (population == null) UninhabitedPlanetParams(
+        meanRadius = meanRadius,
+        mass = mass
+    ) else InhabitedPlanetParams(
+        meanRadius = meanRadius,
+        mass = mass,
+        population = population
+    )).also { repository.save(it) }
 
     fun getByIds(ids: List<Long>): List<Params> = repository.findByIdInList(ids)
 }

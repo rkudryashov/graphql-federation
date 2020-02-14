@@ -31,7 +31,7 @@ class PlanetService(
         meanRadius: Double,
         massNumber: Double,
         massTenPower: Int,
-        population: Double = 0.0
+        population: Double? = null
     ): Planet {
         fun createBigDecimal(number: Double, tenPower: Int) = number.toBigDecimal().multiply(BigDecimal.TEN.pow(tenPower))
 
