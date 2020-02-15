@@ -6,7 +6,7 @@ import javax.persistence.*
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(length = 32)
-sealed class Params(
+sealed class Details(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,17 +20,17 @@ sealed class Params(
 )
 
 @Entity
-class InhabitedPlanetParams(
+class InhabitedPlanetDetails(
     id: Long = 0,
     meanRadius: Double,
     mass: BigDecimal,
     @Column
     val population: Double
-) : Params(id, meanRadius, mass)
+) : Details(id, meanRadius, mass)
 
 @Entity
-class UninhabitedPlanetParams(
+class UninhabitedPlanetDetails(
     id: Long = 0,
     meanRadius: Double,
     mass: BigDecimal
-) : Params(id, meanRadius, mass)
+) : Details(id, meanRadius, mass)

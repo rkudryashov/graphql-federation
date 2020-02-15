@@ -6,13 +6,12 @@ import graphql.schema.DataFetchingEnvironment
 import io.graphqlfederation.planetservice.misc.PlanetConverter
 import io.graphqlfederation.planetservice.model.Planet
 import io.graphqlfederation.planetservice.service.PlanetService
-import io.graphqlfederation.planetservice.web.dto.ParamsDto
-import io.graphqlfederation.planetservice.web.dto.ParamsInputDto
+import io.graphqlfederation.planetservice.web.dto.DetailsDto
+import io.graphqlfederation.planetservice.web.dto.DetailsInputDto
 import io.graphqlfederation.planetservice.web.dto.PlanetDto
 import org.dataloader.DataLoader
 import org.reactivestreams.Publisher
 import org.slf4j.LoggerFactory
-import java.math.BigDecimal
 import java.util.concurrent.CompletableFuture
 import javax.inject.Singleton
 
@@ -61,15 +60,15 @@ class CreatePlanetDataFetcher(
 
         val name = env.getArgument<String>("name")
         val type = env.getArgument<Planet.Type>("type")
-        val paramsInputDto = objectMapper.convertValue(env.getArgument("params"), ParamsInputDto::class.java)
+        val detailsInputDto = objectMapper.convertValue(env.getArgument("details"), DetailsInputDto::class.java)
 
         val newPlanet = planetService.create(
             name,
             type,
-            paramsInputDto.meanRadius,
-            paramsInputDto.mass.number,
-            paramsInputDto.mass.tenPower,
-            paramsInputDto.population
+            detailsInputDto.meanRadius,
+            detailsInputDto.mass.number,
+            detailsInputDto.mass.tenPower,
+            detailsInputDto.population
         )
 
         return planetConverter.toDto(newPlanet)
@@ -86,16 +85,16 @@ class LatestPlanetDataFetcher(
 }
 
 @Singleton
-class ParamsDataFetcher : DataFetcher<CompletableFuture<ParamsDto>> {
+class DetailsDataFetcher : DataFetcher<CompletableFuture<DetailsDto>> {
 
     private val log = LoggerFactory.getLogger(this.javaClass)
 
-    override fun get(env: DataFetchingEnvironment): CompletableFuture<ParamsDto> {
+    override fun get(env: DataFetchingEnvironment): CompletableFuture<DetailsDto> {
         val planetDto = env.getSource<PlanetDto>()
-        log.info("Resolve `params` field for planet: ${planetDto.name}")
+        log.info("Resolve `details` field for planet: ${planetDto.name}")
 
-        val dataLoader: DataLoader<Long, ParamsDto> = env.getDataLoader("params")
+        val dataLoader: DataLoader<Long, DetailsDto> = env.getDataLoader("details")
 
-        return dataLoader.load(planetDto.params.id)
+        return dataLoader.load(planetDto.details.id)
     }
 }

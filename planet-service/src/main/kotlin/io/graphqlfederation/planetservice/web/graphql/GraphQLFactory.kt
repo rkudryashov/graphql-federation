@@ -9,12 +9,12 @@ import graphql.schema.idl.NaturalEnumValuesProvider
 import graphql.schema.idl.RuntimeWiring
 import io.gqljf.federation.FederatedSchemaBuilder
 import io.gqljf.federation.tracing.FederatedTracingInstrumentation
-import io.graphqlfederation.planetservice.misc.ParamsConverter
+import io.graphqlfederation.planetservice.misc.DetailsConverter
 import io.graphqlfederation.planetservice.model.Planet
-import io.graphqlfederation.planetservice.service.ParamsService
-import io.graphqlfederation.planetservice.web.dto.InhabitedPlanetParamsDto
-import io.graphqlfederation.planetservice.web.dto.ParamsDto
-import io.graphqlfederation.planetservice.web.dto.UninhabitedPlanetParamsDto
+import io.graphqlfederation.planetservice.service.DetailsService
+import io.graphqlfederation.planetservice.web.dto.InhabitedPlanetDetailsDto
+import io.graphqlfederation.planetservice.web.dto.DetailsDto
+import io.graphqlfederation.planetservice.web.dto.UninhabitedPlanetDetailsDto
 import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.Factory
 import io.micronaut.core.io.ResourceResolver
@@ -31,9 +31,9 @@ class GraphQLFactory(
     private val planetByNameDataFetcher: PlanetByNameDataFetcher,
     private val createPlanetDataFetcher: CreatePlanetDataFetcher,
     private val latestPlanetDataFetcher: LatestPlanetDataFetcher,
-    private val paramsDataFetcher: ParamsDataFetcher,
-    private val paramsService: ParamsService,
-    private val paramsConverter: ParamsConverter
+    private val detailsDataFetcher: DetailsDataFetcher,
+    private val detailsService: DetailsService,
+    private val detailsConverter: DetailsConverter
 ) {
 
     @Bean
@@ -61,11 +61,11 @@ class GraphQLFactory(
     }
 
     private fun createRuntimeWiring(): RuntimeWiring {
-        val paramsTypeResolver = TypeResolver { env ->
-            when (val params = env.getObject() as ParamsDto) {
-                is InhabitedPlanetParamsDto -> env.schema.getObjectType("InhabitedPlanetParams")
-                is UninhabitedPlanetParamsDto -> env.schema.getObjectType("UninhabitedPlanetParams")
-                else -> throw RuntimeException("Unexpected params type: ${params.javaClass.name}")
+        val detailsTypeResolver = TypeResolver { env ->
+            when (val details = env.getObject() as DetailsDto) {
+                is InhabitedPlanetDetailsDto -> env.schema.getObjectType("InhabitedPlanetDetails")
+                is UninhabitedPlanetDetailsDto -> env.schema.getObjectType("UninhabitedPlanetDetails")
+                else -> throw RuntimeException("Unexpected details type: ${details.javaClass.name}")
             }
         }
 
@@ -83,10 +83,10 @@ class GraphQLFactory(
                 builder.dataFetcher("latestPlanet", latestPlanetDataFetcher)
             }
             .type("Planet") { builder ->
-                builder.dataFetcher("params", paramsDataFetcher)
+                builder.dataFetcher("details", detailsDataFetcher)
             }
-            .type("Params") { builder ->
-                builder.typeResolver(paramsTypeResolver)
+            .type("Details") { builder ->
+                builder.typeResolver(detailsTypeResolver)
             }
             .type("Type") { builder ->
                 builder.enumValues(NaturalEnumValuesProvider(Planet.Type::class.java))
@@ -97,17 +97,17 @@ class GraphQLFactory(
     // bean's scope is `Singleton`, because `BatchLoader` is stateless
     @Bean
     @Singleton
-    fun paramsBatchLoader(): BatchLoader<Long, ParamsDto> = BatchLoader { keys ->
+    fun detailsBatchLoader(): BatchLoader<Long, DetailsDto> = BatchLoader { keys ->
         CompletableFuture.supplyAsync {
-            paramsService.getByIds(keys)
-                .map { paramsConverter.toDto(it) }
+            detailsService.getByIds(keys)
+                .map { detailsConverter.toDto(it) }
         }
     }
 
     // bean's (default) scope is `Prototype`, because `DataLoader` is stateful
     @Bean
     fun dataLoaderRegistry() = DataLoaderRegistry().apply {
-        val paramsDataLoader = DataLoader.newDataLoader(paramsBatchLoader())
-        register("params", paramsDataLoader)
+        val detailsDataLoader = DataLoader.newDataLoader(detailsBatchLoader())
+        register("details", detailsDataLoader)
     }
 }

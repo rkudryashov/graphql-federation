@@ -7,29 +7,29 @@ class PlanetDto(
     val id: Long,
     val name: String,
     val type: Planet.Type,
-    val params: ParamsDto
+    val details: DetailsDto
 )
 
-open class ParamsDto(
+open class DetailsDto(
     val id: Long,
     val meanRadius: Double = 0.0,
     val mass: BigDecimal = BigDecimal.ZERO
 )
 
-class InhabitedPlanetParamsDto(
+class InhabitedPlanetDetailsDto(
     id: Long,
     meanRadius: Double,
     mass: BigDecimal,
     val population: Double
-) : ParamsDto(id, meanRadius, mass)
+) : DetailsDto(id, meanRadius, mass)
 
-class UninhabitedPlanetParamsDto(
+class UninhabitedPlanetDetailsDto(
     id: Long,
     meanRadius: Double,
     mass: BigDecimal
-) : ParamsDto(id, meanRadius, mass)
+) : DetailsDto(id, meanRadius, mass)
 
-class ParamsInputDto(
+class DetailsInputDto(
     val meanRadius: Double,
     val mass: MassInputDto,
     val population: Double?

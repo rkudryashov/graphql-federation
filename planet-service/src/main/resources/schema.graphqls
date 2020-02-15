@@ -5,7 +5,7 @@ type Query {
 }
 
 type Mutation {
-    createPlanet(name: String!, type: Type!, params: ParamsInput!): Planet!
+    createPlanet(name: String!, type: Type!, details: DetailsInput!): Planet!
 }
 
 type Subscription {
@@ -18,22 +18,22 @@ type Planet @key(fields: "id") {
     # from an astronomical point of view
     type: Type!
     isRotatingAroundSun: Boolean! @deprecated(reason: "Now it is not in doubt. Do not use this field")
-    params: Params!
+    details: Details!
 }
 
-interface Params {
+interface Details {
     meanRadius: Float!
     mass: BigDecimal!
 }
 
-type InhabitedPlanetParams implements Params {
+type InhabitedPlanetDetails implements Details {
     meanRadius: Float!
     mass: BigDecimal!
     # in billions
     population: Float!
 }
 
-type UninhabitedPlanetParams implements Params {
+type UninhabitedPlanetDetails implements Details {
     meanRadius: Float!
     mass: BigDecimal!
 }
@@ -45,7 +45,7 @@ enum Type {
     DWARF_PLANET
 }
 
-input ParamsInput {
+input DetailsInput {
     meanRadius: Float!
     mass: MassInput!
     population: Float

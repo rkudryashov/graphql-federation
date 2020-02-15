@@ -11,7 +11,7 @@ import javax.inject.Singleton
 @Singleton
 class PlanetService(
     private val repository: PlanetRepository,
-    private val paramsService: ParamsService
+    private val detailsService: DetailsService
 ) {
 
     private val publishSubject = PublishSubject.create<Planet>()
@@ -35,9 +35,9 @@ class PlanetService(
     ): Planet {
         fun createBigDecimal(number: Double, tenPower: Int) = number.toBigDecimal().multiply(BigDecimal.TEN.pow(tenPower))
 
-        val params = paramsService.create(meanRadius, createBigDecimal(massNumber, massTenPower), population)
+        val details = detailsService.create(meanRadius, createBigDecimal(massNumber, massTenPower), population)
 
-        return Planet(name = name, type = type, paramsId = params.id).also {
+        return Planet(name = name, type = type, detailsId = details.id).also {
             repository.save(it)
             publishSubject.onNext(it)
         }

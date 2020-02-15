@@ -17,15 +17,15 @@ class QueryTests {
     @Inject
     private lateinit var graphQLClient: GraphQLClient
 
-    private val testingFieldsFragment = """
-        fragment testingFields on Planet { 
+    private val planetFragment = """
+        fragment planetFragment on Planet { 
             id
             name
             type
-            params {
+            details {
                 meanRadius
                 mass
-                ... on InhabitedPlanetParams {
+                ... on InhabitedPlanetDetails {
                     population
                 }
             }
@@ -40,10 +40,10 @@ class QueryTests {
                     id
                     name
                     type
-                    params {
+                    details {
                         meanRadius
                         mass
-                        ... on InhabitedPlanetParams {
+                        ... on InhabitedPlanetDetails {
                             population
                         }
                     }
@@ -74,11 +74,11 @@ class QueryTests {
         val query = """
             {
                 planet(id: $earthId) {
-                    ... testingFields
+                    ... planetFragment
                 }
             }
 
-            $testingFieldsFragment
+            $planetFragment
         """.trimIndent()
 
         val response = graphQLClient.sendRequest(query, object : TypeReference<PlanetDto>() {})
@@ -89,7 +89,7 @@ class QueryTests {
                 hasProperty("name", `is`("Earth")),
                 hasProperty("type", `is`(Planet.Type.TERRESTRIAL_PLANET)),
                 hasProperty(
-                    "params", allOf(
+                    "details", allOf(
                         hasProperty("meanRadius", `is`(6371.0)),
                         hasProperty("mass", comparesEqualTo(5.97.toBigDecimal().multiply(BigDecimal.TEN.pow(24))))
                     )
@@ -104,11 +104,11 @@ class QueryTests {
         val query = """
             query testPlanetByName(${'$'}name: String!){
                 planetByName(name: ${'$'}name) {
-                    ... testingFields
+                    ... planetFragment
                 }
             }
 
-            $testingFieldsFragment
+            $planetFragment
         """.trimIndent()
 
         val response = graphQLClient.sendRequest(query, variables, null, object : TypeReference<PlanetDto>() {})
@@ -119,7 +119,7 @@ class QueryTests {
                 hasProperty("name", `is`("Earth")),
                 hasProperty("type", `is`(Planet.Type.TERRESTRIAL_PLANET)),
                 hasProperty(
-                    "params", allOf(
+                    "details", allOf(
                         hasProperty("meanRadius", `is`(6371.0)),
                         hasProperty("mass", comparesEqualTo(5.97.toBigDecimal().multiply(BigDecimal.TEN.pow(24))))
                     )
