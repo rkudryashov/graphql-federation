@@ -1,7 +1,7 @@
 package io.graphqlfederation.planetservice.service
 
-import io.graphqlfederation.planetservice.model.InhabitedPlanetDetails
 import io.graphqlfederation.planetservice.model.Details
+import io.graphqlfederation.planetservice.model.InhabitedPlanetDetails
 import io.graphqlfederation.planetservice.model.UninhabitedPlanetDetails
 import io.graphqlfederation.planetservice.repository.DetailsRepository
 import java.math.BigDecimal

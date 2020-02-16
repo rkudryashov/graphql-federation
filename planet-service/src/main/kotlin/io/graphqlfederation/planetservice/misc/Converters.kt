@@ -1,11 +1,11 @@
 package io.graphqlfederation.planetservice.misc
 
-import io.graphqlfederation.planetservice.model.InhabitedPlanetDetails
 import io.graphqlfederation.planetservice.model.Details
+import io.graphqlfederation.planetservice.model.InhabitedPlanetDetails
 import io.graphqlfederation.planetservice.model.Planet
 import io.graphqlfederation.planetservice.model.UninhabitedPlanetDetails
-import io.graphqlfederation.planetservice.web.dto.InhabitedPlanetDetailsDto
 import io.graphqlfederation.planetservice.web.dto.DetailsDto
+import io.graphqlfederation.planetservice.web.dto.InhabitedPlanetDetailsDto
 import io.graphqlfederation.planetservice.web.dto.PlanetDto
 import io.graphqlfederation.planetservice.web.dto.UninhabitedPlanetDetailsDto
 import javax.inject.Singleton

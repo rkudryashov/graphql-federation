@@ -12,8 +12,8 @@ import io.gqljf.federation.tracing.FederatedTracingInstrumentation
 import io.graphqlfederation.planetservice.misc.DetailsConverter
 import io.graphqlfederation.planetservice.model.Planet
 import io.graphqlfederation.planetservice.service.DetailsService
-import io.graphqlfederation.planetservice.web.dto.InhabitedPlanetDetailsDto
 import io.graphqlfederation.planetservice.web.dto.DetailsDto
+import io.graphqlfederation.planetservice.web.dto.InhabitedPlanetDetailsDto
 import io.graphqlfederation.planetservice.web.dto.UninhabitedPlanetDetailsDto
 import io.micronaut.context.annotation.Bean
 import io.micronaut.context.annotation.Factory

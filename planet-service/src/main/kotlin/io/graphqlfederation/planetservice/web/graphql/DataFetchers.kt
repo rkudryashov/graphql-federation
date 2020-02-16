@@ -29,9 +29,9 @@ class PlanetDataFetcher(
     private val planetService: PlanetService,
     private val planetConverter: PlanetConverter
 ) : DataFetcher<PlanetDto> {
-    override fun get(env: DataFetchingEnvironment): PlanetDto {
+    override fun get(env: DataFetchingEnvironment): PlanetDto? {
         val id = env.getArgument<String>("id").toLong()
-        return planetConverter.toDto(planetService.getById(id))
+        return planetService.getById(id)?.let { planetConverter.toDto(it) }
     }
 }
 
@@ -40,9 +40,9 @@ class PlanetByNameDataFetcher(
     private val planetService: PlanetService,
     private val planetConverter: PlanetConverter
 ) : DataFetcher<PlanetDto> {
-    override fun get(env: DataFetchingEnvironment): PlanetDto {
+    override fun get(env: DataFetchingEnvironment): PlanetDto? {
         val name = env.getArgument<String>("name")
-        return planetConverter.toDto(planetService.getByName(name))
+        return planetService.getByName(name)?.let { planetConverter.toDto(it) }
     }
 }
 

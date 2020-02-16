@@ -109,7 +109,7 @@ class QueryTests {
     }
 
     @Test
-    fun testSatelliteByNameShouldThrowException() {
+    fun testSatelliteByNameShouldThrowSecurityException() {
         val titanName = "Titan"
         val query = """
             {

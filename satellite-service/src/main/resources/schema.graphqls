@@ -1,7 +1,7 @@
 type Query {
     satellites: [Satellite!]!
-    satellite(id: ID!): Satellite!
-    satelliteByName(name: String!): Satellite!
+    satellite(id: ID!): Satellite
+    satelliteByName(name: String!): Satellite
 }
 
 type Satellite {

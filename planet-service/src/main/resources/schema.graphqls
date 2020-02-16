@@ -1,7 +1,7 @@
 type Query {
     planets: [Planet!]!
-    planet(id: ID!): Planet!
-    planetByName(name: String!): Planet!
+    planet(id: ID!): Planet
+    planetByName(name: String!): Planet
 }
 
 type Mutation {

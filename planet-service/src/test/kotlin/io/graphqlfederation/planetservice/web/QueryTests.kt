@@ -18,7 +18,7 @@ class QueryTests {
     private lateinit var graphQLClient: GraphQLClient
 
     private val planetFragment = """
-        fragment planetFragment on Planet { 
+        fragment planetFragment on Planet {
             id
             name
             type

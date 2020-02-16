@@ -22,9 +22,9 @@ class SatelliteDataFetcher(
     private val satelliteService: SatelliteService,
     private val satelliteConverter: SatelliteConverter
 ) : DataFetcher<SatelliteDto> {
-    override fun get(env: DataFetchingEnvironment): SatelliteDto {
+    override fun get(env: DataFetchingEnvironment): SatelliteDto? {
         val id = env.getArgument<String>("id").toLong()
-        return satelliteConverter.toDto(satelliteService.getById(id))
+        return satelliteService.getById(id)?.let { satelliteConverter.toDto(it) }
     }
 }
 
@@ -33,9 +33,9 @@ class SatelliteByNameDataFetcher(
     private val satelliteService: SatelliteService,
     private val satelliteConverter: SatelliteConverter
 ) : DataFetcher<SatelliteDto> {
-    override fun get(env: DataFetchingEnvironment): SatelliteDto {
+    override fun get(env: DataFetchingEnvironment): SatelliteDto? {
         val name = env.getArgument<String>("name")
-        return satelliteConverter.toDto(satelliteService.getByName(name))
+        return satelliteService.getByName(name)?.let { satelliteConverter.toDto(it) }
     }
 }
 
