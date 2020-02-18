@@ -5,7 +5,6 @@ import io.graphqlfederation.planetservice.repository.PlanetRepository
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.subjects.PublishSubject
-import java.math.BigDecimal
 import javax.inject.Singleton
 
 @Singleton
@@ -30,9 +29,8 @@ class PlanetService(
         massTenPower: Int,
         population: Double? = null
     ): Planet {
-        fun createBigDecimal(number: Double, tenPower: Int) = number.toBigDecimal().multiply(BigDecimal.TEN.pow(tenPower))
-
-        val details = detailsService.create(meanRadius, createBigDecimal(massNumber, massTenPower), population)
+        val mass = massNumber.toBigDecimal().scaleByPowerOfTen(massTenPower)
+        val details = detailsService.create(meanRadius, mass, population)
 
         return Planet(name = name, type = type, detailsId = details.id).also {
             repository.save(it)
