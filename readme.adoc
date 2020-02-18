@@ -1,7 +1,6 @@
 = Federation of GraphQL Java microservices
 
 image:https://github.com/rkudryashov/graphql-federation/workflows/Java%20CI/badge.svg?branch=master[Java CI,link=https://github.com/rkudryashov/graphql-federation/actions]
-image:https://codecov.io/gh/rkudryashov/graphql-federation/branch/master/graph/badge.svg[Code coverage,link=https://codecov.io/gh/rkudryashov/graphql-federation]
 
 --
 image::architecture.png[align="center"]
