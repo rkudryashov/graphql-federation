@@ -9,8 +9,8 @@
     "nodemon": "2.0.2"
   },
   "dependencies": {
-    "@apollo/gateway": "0.12.0",
-    "apollo-server": "2.10.0",
+    "@apollo/gateway": "0.13.2",
+    "apollo-server": "2.11.0",
     "graphql": "14.6.0"
   }
 }
